@@ -1,0 +1,5547 @@
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace ns1 = "http://www.w3.org/1999/xhtml"
+namespace rng = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://purl.oclc.org/dsdl/schematron"
+namespace sch = "http://purl.oclc.org/dsdl/schematron"
+default namespace tei = "http://www.tei-c.org/ns/1.0"
+namespace teix = "http://www.tei-c.org/ns/Examples"
+namespace xi = "http://www.w3.org/2001/XInclude"
+namespace xlink = "http://www.w3.org/1999/xlink"
+
+# Schema generated from ODD source 2024-05-26T12:55:38Z. .
+# TEI Edition: Version 4.5.0. Last updated on
+#         25th October 2022, revision 3e98e619e
+# TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
+#
+
+# Fichier de travail, à ne pas diffuser.
+macro.abContent = (text | model.paraPart | ab)*
+macro.paraContent = (text | model.paraPart)*
+macro.phraseSeq =
+  (text
+   | model.gLike
+   | model.attributable
+   | model.phrase
+   | model.global)*
+macro.phraseSeq.limited = (text | model.limitedPhrase | model.global)*
+macro.specialPara =
+  (text
+   | model.gLike
+   | model.phrase
+   | model.inter
+   | model.divPart
+   | model.global)*
+macro.xtext = (text | model.gLike)*
+att.ascribed.attributes = att.ascribed.attribute.who
+att.ascribed.attribute.who =
+  
+  ## indique la personne ou le groupe de personnes à qui le contenu de l'élément est attribué.
+  attribute who {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.ascribed.directed.attributes =
+  att.ascribed.attributes, att.ascribed.directed.attribute.toWhom
+att.ascribed.directed.attribute.toWhom =
+  
+  ## indicates the person, or group of people, to whom a speech act or action is directed.
+  attribute toWhom {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.canonical.attributes =
+  att.canonical.attribute.key, att.canonical.attribute.ref
+att.canonical.attribute.key =
+  
+  ## fournit un moyen, défini de façon externe, d'identifier l'entité (ou les entités) nommé(es), en utilisant une valeur codée d'un certain type.
+  attribute key { xsd:string }?
+att.canonical.attribute.ref =
+  
+  ## (référence) fournit un moyen explicite de localiser une définition complète de l'entité nommée au moyen d'un ou plusieurs URIs.
+  attribute ref {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.ranging.attributes =
+  att.ranging.attribute.atLeast,
+  att.ranging.attribute.atMost,
+  att.ranging.attribute.min,
+  att.ranging.attribute.max,
+  att.ranging.attribute.confidence
+att.ranging.attribute.atLeast =
+  
+  ## donne une estimation de la valeur minimum pour la mesure.
+  attribute atLeast {
+    xsd:double
+    | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+    | xsd:decimal
+  }?
+att.ranging.attribute.atMost =
+  
+  ## donne une estimation de la valeur maximum pour la mesure.
+  attribute atMost {
+    xsd:double
+    | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+    | xsd:decimal
+  }?
+att.ranging.attribute.min =
+  
+  ## lorsque la mesure résume plus d'une observation, fournit la valeur minimum observée.
+  attribute min {
+    xsd:double
+    | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+    | xsd:decimal
+  }?
+att.ranging.attribute.max =
+  
+  ## lorsque la mesure résume plus d'une observation, fournit la valeur maximum observée.
+  attribute max {
+    xsd:double
+    | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+    | xsd:decimal
+  }?
+att.ranging.attribute.confidence =
+  [
+    a:documentation [
+      "specifies the degree of statistical confidence (between zero and one) that a value falls within the range specified by "
+      ns1:code [ "@min" ]
+      " and "
+      ns1:code [ "@max" ]
+      ", or the proportion of observed values that fall within that range."
+    ]
+  ]
+  attribute confidence { xsd:double }?
+att.dimensions.attributes =
+  att.ranging.attributes,
+  att.dimensions.attribute.unit,
+  att.dimensions.attribute.quantity,
+  att.dimensions.attribute.precision,
+  att.dimensions.attribute.scope
+att.dimensions.attribute.unit =
+  
+  ## noms des unités utilisées pour la mesure.
+  ## Suggested values include: 1] cm (centimetres); 2] mm (millimetres); 3] in (inches); 4] line; 5] char (characters)
+  attribute unit {
+    
+    ## (centimètres) 
+    "cm"
+    | 
+      ## (millimètres) 
+      "mm"
+    | 
+      ## (pouces) 
+      "in"
+    | 
+      ## lignes de texte
+      "line"
+    | 
+      ## (characters) caractères du texte
+      "char"
+    | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.dimensions.attribute.quantity =
+  
+  ## spécifie la longueur dans les unités indiquées
+  attribute quantity {
+    xsd:double
+    | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+    | xsd:decimal
+  }?
+att.dimensions.attribute.precision =
+  
+  ## caractérise la précision des valeurs spécifiées par les autres attributs.
+  attribute precision {
+    
+    ##
+    "high"
+    | 
+      ##
+      "medium"
+    | 
+      ##
+      "low"
+    | 
+      ##
+      "unknown"
+  }?
+att.dimensions.attribute.scope =
+  
+  ## spécifie l'applicabilité de cette mesure, là où plus d'un objet est mesuré.
+  ## Sample values include: 1] all; 2] most; 3] range
+  attribute scope {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.written.attributes = att.written.attribute.hand
+att.written.attribute.hand =
+  
+  ## signale la main de celui qui est intervenue.
+  attribute hand {
+    xsd:anyURI { pattern = "\S+" }
+  }?
+att.damaged.attributes =
+  att.dimensions.attributes,
+  att.written.attributes,
+  att.damaged.attribute.agent,
+  att.damaged.attribute.degree,
+  att.damaged.attribute.group
+att.damaged.attribute.agent =
+  
+  ## caractérise la raison des dommages, lorsqu'elle peut être identifiée
+  ## Sample values include: 1] rubbing; 2] mildew; 3] smoke
+  attribute agent {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.damaged.attribute.degree =
+  [
+    a:documentation [
+      "indique le degré (la gravité) du dommage subi, selon une grille appropriée. L'attribut "
+      ns1:code [ "@degree" ]
+      " doit être utilisé dans le seul cas où le texte peut être lu avec certitude ; le texte restitué en utilisant d'autres sources doit être encodé au moyen de l'élément "
+      ns1:code [ "<supplied>" ]
+      "."
+    ]
+  ]
+  attribute degree {
+    xsd:double
+    | (
+       ##
+       "high"
+       | 
+         ##
+         "medium"
+       | 
+         ##
+         "low"
+       | 
+         ##
+         "unknown")
+  }?
+att.damaged.attribute.group =
+  
+  ## permet d'assigner un numéro quelconque à chaque fragment endommagé considéré comme faisant partie d'un ensemble résultant du même phénomène physique
+  attribute group { xsd:nonNegativeInteger }?
+att.breaking.attributes = att.breaking.attribute.break
+att.breaking.attribute.break =
+  
+  ## indique si l'élément qui porte cet attribut peut être considéré comme une espace blanc indiquant la fin d'un mot orthographique.
+  attribute break {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.datable.w3c.attributes =
+  att.datable.w3c.attribute.when,
+  att.datable.w3c.attribute.notBefore,
+  att.datable.w3c.attribute.notAfter,
+  att.datable.w3c.attribute.from,
+  att.datable.w3c.attribute.to
+att.datable.w3c.attribute.when =
+  
+  ## spécifie une date exacte pour un événement sous une forme normalisée, par ex. aaaa-mm-jj.
+  attribute when {
+    xsd:date
+    | xsd:gYear
+    | xsd:gMonth
+    | xsd:gDay
+    | xsd:gYearMonth
+    | xsd:gMonthDay
+    | xsd:time
+    | xsd:dateTime
+  }?
+att.datable.w3c.attribute.notBefore =
+  
+  ## spécifie la date la plus ancienne pour l'événement sous une forme normalisée, par ex. aaaa-mm-jj
+  attribute notBefore {
+    xsd:date
+    | xsd:gYear
+    | xsd:gMonth
+    | xsd:gDay
+    | xsd:gYearMonth
+    | xsd:gMonthDay
+    | xsd:time
+    | xsd:dateTime
+  }?
+att.datable.w3c.attribute.notAfter =
+  
+  ## spécifie la date la plus récente possible pour l'événement sous une forme normalisée, par ex. aaaa-mm-jj
+  attribute notAfter {
+    xsd:date
+    | xsd:gYear
+    | xsd:gMonth
+    | xsd:gDay
+    | xsd:gYearMonth
+    | xsd:gMonthDay
+    | xsd:time
+    | xsd:dateTime
+  }?
+att.datable.w3c.attribute.from =
+  
+  ## indique le point de départ d'une période sous une forme normalisée, par ex. aaaa-mm-jj
+  attribute from {
+    xsd:date
+    | xsd:gYear
+    | xsd:gMonth
+    | xsd:gDay
+    | xsd:gYearMonth
+    | xsd:gMonthDay
+    | xsd:time
+    | xsd:dateTime
+  }?
+att.datable.w3c.attribute.to =
+  
+  ## indique le terme de la période sous une forme normalisée, par ex. aaaa-mm-jj
+  attribute to {
+    xsd:date
+    | xsd:gYear
+    | xsd:gMonth
+    | xsd:gDay
+    | xsd:gYearMonth
+    | xsd:gMonthDay
+    | xsd:time
+    | xsd:dateTime
+  }?
+s:pattern [
+  id =
+    "Manuscrit_Roi-att.datable.w3c-att-datable-w3c-when-constraint-rule-1"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[@when]"
+    "\x{a}" ~
+    "         "
+    sch:report [
+      test = "@notBefore|@notAfter|@from|@to"
+      role = "nonfatal"
+      "The @when attribute cannot be used with any other att.datable.w3c attributes."
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+s:pattern [
+  id =
+    "Manuscrit_Roi-att.datable.w3c-att-datable-w3c-from-constraint-rule-2"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[@from]"
+    "\x{a}" ~
+    "         "
+    sch:report [
+      test = "@notBefore"
+      role = "nonfatal"
+      "The @from and @notBefore attributes cannot be used together."
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+s:pattern [
+  id =
+    "Manuscrit_Roi-att.datable.w3c-att-datable-w3c-to-constraint-rule-3"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[@to]"
+    "\x{a}" ~
+    "         "
+    sch:report [
+      test = "@notAfter"
+      role = "nonfatal"
+      "The @to and @notAfter attributes cannot be used together."
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.datable.attributes =
+  att.datable.w3c.attributes,
+  att.datable.attribute.calendar,
+  att.datable.attribute.period
+att.datable.attribute.calendar =
+  
+  ## indique le système ou le calendrier auquel appartient la date exprimée dans le contenu de l'élément.
+  attribute calendar {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+s:pattern [
+  id = "Manuscrit_Roi-att.datable-calendar-calendar-constraint-rule-5"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[@calendar]"
+    "\x{a}" ~
+    "         "
+    sch:assert [
+      test = "string-length( normalize-space(.) ) gt 0"
+      " @calendar indicates one or more\x{a}" ~
+      "            systems or calendars to which the date represented by the content of this element belongs,\x{a}" ~
+      "            but this "
+      sch:name [ ]
+      " element has no textual content."
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.datable.attribute.period =
+  
+  ## fournit un pointeur vers un emplacement donné définissant une période de temps nommée durant laquelle l'item concerné s'inscrit.
+  attribute period {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+s:pattern [
+  id = "Manuscrit_Roi-att.datable-calendar-constraint-rule-4"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[@calendar]"
+    "\x{a}" ~
+    "         "
+    sch:assert [
+      test = "string-length( normalize-space(.) ) gt 0"
+      " @calendar indicates one or more\x{a}" ~
+      "            systems or calendars to which the date represented by the content of this element belongs,\x{a}" ~
+      "            but this "
+      sch:name [ ]
+      " element has no textual content."
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.docStatus.attributes = att.docStatus.attribute.status
+att.docStatus.attribute.status =
+  
+  ## describes the status of a document either currently or, when associated with a dated element, at the time indicated.
+  [ a:defaultValue = "draft" ]
+  attribute status {
+    
+    ## (brouillon) le document est dans un état préparatoire
+    "draft"
+    | 
+      ## (gelé) le document est gelé dans l'état actuel et aucune modification ne doit être faite
+      "frozen"
+    | 
+      ## (déprécié) le document est déprécié pour une raison ou une autre et ne doit plus être utilisé
+      "deprecated"
+    | 
+      ## (proposé) le document est dans un état pré-final et est proposé pour publication ; il doit répondre à la version plus complète du modèle
+      "proposed"
+    | 
+      ## (publié) le document a été approuvé et est publié dans la version actuelle, qui est considérée comme définitive
+      "published"
+  }?
+att.global.responsibility.attributes =
+  att.global.responsibility.attribute.cert,
+  att.global.responsibility.attribute.resp
+att.global.responsibility.attribute.cert =
+  
+  ## (certitude) donne le degré de certitude associée à l'intervention ou à l'interprétation.
+  attribute cert {
+    xsd:double
+    | (
+       ##
+       "high"
+       | 
+         ##
+         "medium"
+       | 
+         ##
+         "low"
+       | 
+         ##
+         "unknown")
+  }?
+att.global.responsibility.attribute.resp =
+  
+  ## (responsable) indique l'agent responsable de l'intervention ou de l'interprétation, par exemple un éditeur ou un transcripteur.
+  attribute resp {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.editLike.attributes = att.editLike.attribute.evidence
+att.editLike.attribute.evidence =
+  
+  ## indique la nature de la preuve attestant la fiabilité ou la justesse de l'intervention ou de l'interprétation.
+  ## Suggested values include: 1] internal; 2] external; 3] conjecture
+  attribute evidence {
+    list {
+      (
+       ## l'intervention est justifiée par une preuve interne
+       "internal"
+       | 
+         ## l'intervention est justifiée par une preuve externe
+         "external"
+       | 
+         ## l'intervention ou l'interprétation a été faite par le rédacteur, le catalogueur, ou le chercheur sur la base de leur expertise.
+         "conjecture"
+       | xsd:token { pattern = "[^\p{C}\p{Z}]+" })+
+    }
+  }?
+att.global.rendition.attributes = att.global.rendition.attribute.rend
+att.global.rendition.attribute.rend =
+  
+  ## (interprétation) indique comment l'élément en question a été rendu ou présenté dans le texte source
+  attribute rend {
+    list {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }+
+    }
+  }?
+att.global.source.attributes = att.global.source.attribute.source
+att.global.source.attribute.source =
+  
+  ## specifies the source from which some aspect of this element is drawn.
+  attribute source {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+s:pattern [
+  id =
+    "Manuscrit_Roi-att.global.source-source-only_1_ODD_source-constraint-rule-6"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[@source]"
+    "\x{a}" ~
+    "         "
+    sch:let [
+      name = "srcs"
+      value = "tokenize( normalize-space(@source),' ')"
+    ]
+    "\x{a}" ~
+    "         "
+    sch:report [
+      test =
+        "( self::tei:classRef               | self::tei:dataRef               | self::tei:elementRef               | self::tei:macroRef               | self::tei:moduleRef               | self::tei:schemaSpec )               and               $srcs[2]"
+      "\x{a}" ~
+      "              When used on a schema description element (like\x{a}" ~
+      "              "
+      sch:value-of [ select = "name(.)" ]
+      "), the @source attribute\x{a}" ~
+      "              should have only 1 value. (This one has "
+      sch:value-of [ select = "count($srcs)" ]
+      ".)\x{a}" ~
+      "            "
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.global.attributes =
+  att.global.rendition.attributes,
+  att.global.linking.attributes,
+  att.global.analytic.attributes,
+  att.global.responsibility.attributes,
+  att.global.source.attributes,
+  att.global.attribute.xmlid,
+  att.global.attribute.n,
+  att.global.attribute.xmllang
+att.global.attribute.xmlid =
+  
+  ## (identifiant) fournit un identifiant unique pour l'élément qui porte l'attribut
+  attribute xml:id { xsd:ID }?
+att.global.attribute.n =
+  
+  ## (nombre) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+  attribute n { xsd:string }?
+att.global.attribute.xmllang =
+  [
+    a:documentation [
+      "(langue) indique la langue du contenu de l'élément en utilisant les codes du "
+      ns1:a [ href = "http://www.ietf.org/rfc/rfc3066.txt" "RFC 3066" ]
+      "\x{a}" ~
+      "            "
+    ]
+  ]
+  attribute xml:lang {
+    xsd:language
+    | (
+       ##
+       "")
+  }?
+att.handFeatures.attributes =
+  att.handFeatures.attribute.scribe,
+  att.handFeatures.attribute.scribeRef,
+  att.handFeatures.attribute.script,
+  att.handFeatures.attribute.scriptRef,
+  att.handFeatures.attribute.medium,
+  att.handFeatures.attribute.scope
+att.handFeatures.attribute.scribe =
+  
+  ## donne un nom normalisé ou un autre identifiant pour le scribe reconnu comme responsable de cette main.
+  attribute scribe { xsd:Name }?
+att.handFeatures.attribute.scribeRef =
+  [
+    a:documentation [
+      "points to a full description of the scribe concerned, typically supplied by a "
+      ns1:code [ "<person>" ]
+      " element elsewhere in the description."
+    ]
+  ]
+  attribute scribeRef {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.handFeatures.attribute.script =
+  
+  ## caractérise la calligraphie ou le style d'écriture particuliers utilisés par cette main, par exemple écriture anglaise, de chancellerie, italienne, etc.
+  attribute script {
+    list { xsd:Name+ }
+  }?
+att.handFeatures.attribute.scriptRef =
+  [
+    a:documentation [
+      "points to a full description of the script or writing style used by this hand, typically supplied by a "
+      ns1:code [ "<scriptNote>" ]
+      " element elsewhere in the description."
+    ]
+  ]
+  attribute scriptRef {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.handFeatures.attribute.medium =
+  
+  ## décrit la teinte ou le type d'encre, par exemple brune, ou un autre outil d'écriture, par exemple un crayon.
+  attribute medium {
+    list {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }+
+    }
+  }?
+att.handFeatures.attribute.scope =
+  
+  ## Spécifie la fréquence d'apparition de cette main dans le manuscrit.
+  attribute scope {
+    
+    ## il n'y a que cette main dans le manuscrit.
+    "sole"
+    | 
+      ## cette main est utilisée dans la majeure partie du manuscrit.
+      "major"
+    | 
+      ## cette main est utilisée occasionnellement dans le manuscrit.
+      "minor"
+  }?
+att.resourced.attributes = att.resourced.attribute.url
+att.resourced.attribute.url =
+  
+  ## (adresse URL) specifies the URL from which the media concerned may be obtained.
+  attribute url {
+    xsd:anyURI { pattern = "\S+" }
+  }
+att.measurement.attribute.unitRef =
+  [
+    a:documentation [
+      "points to a unique identifier stored in the "
+      ns1:code [ "@xml:id" ]
+      " of a "
+      ns1:code [ "<unitDef>" ]
+      " element that defines a unit of measure."
+    ]
+  ]
+  attribute unitRef {
+    xsd:anyURI { pattern = "\S+" }
+  }?
+att.measurement.attribute.commodity =
+  
+  ## (article) indique ce qui est mesuré.
+  attribute commodity {
+    list {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }+
+    }
+  }?
+s:pattern [
+  id =
+    "Manuscrit_Roi-att.measurement-att-measurement-unitRef-constraint-rule-7"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[@unitRef]"
+    "\x{a}" ~
+    "         "
+    sch:report [
+      test = "@unit"
+      role = "info"
+      "The @unit attribute may be unnecessary when @unitRef is present."
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.naming.attributes = att.canonical.attributes
+att.notated.attributes = att.notated.attribute.notation
+att.notated.attribute.notation =
+  
+  ## précise le nom d'une notation définie précédemment, utilisée dans le contenu de l'élément.
+  attribute notation {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.placement.attributes = att.placement.attribute.place
+att.placement.attribute.place =
+  
+  ## specifie où cet item se trouve.
+  ## Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf; 6] above; 7] right; 8] below; 9] left; 10] end; 11] inline; 12] inspace
+  attribute place {
+    list {
+      (
+       ## dans la marge supérieure
+       "top"
+       | 
+         ## dans la marge inférieure
+         "bottom"
+       | 
+         ## dans la marge (gauche, droite ou les deux en même temps)
+         "margin"
+       | 
+         ## sur la page opposée
+         "opposite"
+       | 
+         ## de l'autre côté de la feuille
+         "overleaf"
+       | 
+         ## au-dessus de la ligne
+         "above"
+       | 
+         ## to the right, e.g. to the right of a vertical line of text, or to the right of a figure
+         "right"
+       | 
+         ## au-dessous de la ligne
+         "below"
+       | 
+         ## to the left, e.g. to the left of a vertical line of text, or to the left of a figure
+         "left"
+       | 
+         ## à la fin, par exemple d'un chapitre ou d'un volume
+         "end"
+       | 
+         ## dans le corps du texte
+         "inline"
+       | 
+         ## dans un espace prédéfini, par exemple à gauche d'un scripteur précédent
+         "inspace"
+       | xsd:token { pattern = "[^\p{C}\p{Z}]+" })+
+    }
+  }?
+att.typed.attributes = att.typed.attribute.type
+att.typed.attribute.type =
+  
+  ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+  attribute type {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+s:pattern [
+  id = "Manuscrit_Roi-att.typed-subtypeTyped-constraint-rule-8"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[@subtype]"
+    "\x{a}" ~
+    "         "
+    sch:assert [
+      test = "@type"
+      "The "
+      sch:name [ ]
+      " element should not be categorized in detail with @subtype unless also categorized in general with @type"
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.pointing.attributes = att.pointing.attribute.target
+att.pointing.attribute.target =
+  
+  ## précise la cible de la référence en donnant une ou plusieurs références URI
+  attribute target {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+s:pattern [
+  id = "Manuscrit_Roi-att.pointing-targetLang-constraint-rule-9"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[not(self::tei:schemaSpec)][@targetLang]"
+    "\x{a}" ~
+    "         "
+    sch:assert [
+      test = "@target"
+      "@targetLang should only be used on "
+      sch:name [ ]
+      " if @target is specified."
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.segLike.attributes =
+  att.metrical.attributes, att.segLike.attribute.function
+att.segLike.attribute.function =
+  
+  ## (fonction) caractérise la fonction du segment.
+  attribute function {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.sortable.attributes = att.sortable.attribute.sortKey
+att.sortable.attribute.sortKey =
+  
+  ## supplies the sort key for this element in an index, list or group which contains it.
+  attribute sortKey {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.edition.attributes =
+  att.edition.attribute.ed, att.edition.attribute.edRef
+att.edition.attribute.ed =
+  
+  ## (édition) fournit un identifiant arbitraire pour l'édition source dans laquelle la caractéristique associée (par exemple, une page, une colonne ou un saut de ligne) apparaît à ce point du texte.
+  attribute ed {
+    list {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }+
+    }
+  }?
+att.edition.attribute.edRef =
+  
+  ## (edition reference) provides a pointer to the source edition in which the associated feature (for example, a page, column, or line break) occurs at this point in the text.
+  attribute edRef {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.transcriptional.attributes =
+  att.editLike.attributes,
+  att.written.attributes,
+  att.transcriptional.attribute.status,
+  att.transcriptional.attribute.cause,
+  att.transcriptional.attribute.seq
+att.transcriptional.attribute.status =
+  
+  ## indique la conséquence de l'intervention, par exemple dans le cas d'un effacement, une biffure, qui inclut trop ou pas assez de texte, ou dans le cas d'un ajout, une insertion, qui reproduit une portion du texte déjà présent.
+  ## Sample values include: 1] duplicate; 2] duplicate-partial; 3] excessStart; 4] excessEnd; 5] shortStart; 6] shortEnd; 7] partial; 8] unremarkable
+  [ a:defaultValue = "unremarkable" ]
+  attribute status {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.transcriptional.attribute.cause =
+  
+  ## documents the presumed cause for the intervention.
+  attribute cause {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.transcriptional.attribute.seq =
+  
+  ## (séquence) assigne un numéro séquentiel relatif à l'ordre dans lequel les traits encodés portant cet attribut sont supposés être apparus.
+  attribute seq { xsd:nonNegativeInteger }?
+att.citing.attributes =
+  att.citing.attribute.unit,
+  att.citing.attribute.from,
+  att.citing.attribute.to
+att.citing.attribute.unit =
+  
+  ## identifie le type d'information que transmet l'élément, par exemple colonnes, pages, volume, inscription, etc.
+  ## Suggested values include: 1] volume (volume); 2] issue; 3] page (page); 4] line; 5] chapter (chapter); 6] part; 7] column; 8] entry
+  attribute unit {
+    
+    ## (volume) l'élément contient un numéro de volume.
+    "volume"
+    | 
+      ## l'élément contient un numéro de livraison ou bien un numéro de volume et de livraison.
+      "issue"
+    | 
+      ## (page) l'élément contient un nombre de pages ou l'étendue de sélection des pages.
+      "page"
+    | 
+      ## the element contains a line number or line range.
+      "line"
+    | 
+      ## (chapitre) l'élément contient une indication de chapitre (le numéro et/ou le titre)
+      "chapter"
+    | 
+      ## l'élément identifie une partie d'un livre ou une anthologie.
+      "part"
+    | 
+      ## the element identifies a column.
+      "column"
+    | 
+      ## the element identifies an entry number or label in a list of entries.
+      "entry"
+    | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.citing.attribute.from =
+  [
+    a:documentation [
+      "specifies the starting point of the range of units indicated by the "
+      ns1:code [ "@unit" ]
+      " attribute."
+    ]
+  ]
+  attribute from {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.citing.attribute.to =
+  [
+    a:documentation [
+      "specifies the end-point of the range of units indicated by the "
+      ns1:code [ "@unit" ]
+      " attribute."
+    ]
+  ]
+  attribute to {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+model.nameLike.agent = name | orgName | persName
+model.nameLike.agent_alternation = name | orgName | persName
+model.nameLike.agent_sequence = name, orgName, persName
+model.nameLike.agent_sequenceOptional = name?, orgName?, persName?
+model.nameLike.agent_sequenceOptionalRepeatable =
+  name*, orgName*, persName*
+model.nameLike.agent_sequenceRepeatable = name+, orgName+, persName+
+model.segLike = w | c | pc | seg
+model.segLike_alternation = w | c | pc | seg
+model.segLike_sequence = w, c, pc, seg
+model.segLike_sequenceOptional = w?, c?, pc?, seg?
+model.segLike_sequenceOptionalRepeatable = w*, c*, pc*, seg*
+model.segLike_sequenceRepeatable = w+, c+, pc+, seg+
+model.hiLike = hi | q
+model.hiLike_alternation = hi | q
+model.hiLike_sequence = hi, q
+model.hiLike_sequenceOptional = hi?, q?
+model.hiLike_sequenceOptionalRepeatable = hi*, q*
+model.hiLike_sequenceRepeatable = hi+, q+
+model.emphLike = emph | mentioned | term | title
+model.emphLike_alternation = emph | mentioned | term | title
+model.emphLike_sequence = emph, mentioned, term, title
+model.emphLike_sequenceOptional = emph?, mentioned?, term?, title?
+model.emphLike_sequenceOptionalRepeatable =
+  emph*, mentioned*, term*, title*
+model.emphLike_sequenceRepeatable = emph+, mentioned+, term+, title+
+model.highlighted = model.hiLike | model.emphLike
+model.highlighted_alternation =
+  model.hiLike_alternation | model.emphLike_alternation
+model.highlighted_sequence =
+  model.hiLike_sequence, model.emphLike_sequence
+model.highlighted_sequenceOptional =
+  model.hiLike_sequenceOptional?, model.emphLike_sequenceOptional?
+model.highlighted_sequenceOptionalRepeatable =
+  model.hiLike_sequenceOptionalRepeatable*,
+  model.emphLike_sequenceOptionalRepeatable*
+model.highlighted_sequenceRepeatable =
+  model.hiLike_sequenceRepeatable+, model.emphLike_sequenceRepeatable+
+model.dateLike = date
+model.dateLike_alternation = date
+model.dateLike_sequence = date
+model.dateLike_sequenceOptional = date?
+model.dateLike_sequenceOptionalRepeatable = date*
+model.dateLike_sequenceRepeatable = date+
+model.dimLike = height | depth | width
+model.measureLike = num | measure | dim | height | depth | width
+model.measureLike_alternation =
+  num | measure | dim | height | depth | width
+model.measureLike_sequence = num, measure, dim, height, depth, width
+model.measureLike_sequenceOptional =
+  num?, measure?, dim?, height?, depth?, width?
+model.measureLike_sequenceOptionalRepeatable =
+  num*, measure*, dim*, height*, depth*, width*
+model.measureLike_sequenceRepeatable =
+  num+, measure+, dim+, height+, depth+, width+
+model.egLike = notAllowed
+model.egLike_alternation = notAllowed
+model.egLike_sequence = empty
+model.egLike_sequenceOptional = empty
+model.egLike_sequenceOptionalRepeatable = empty
+model.egLike_sequenceRepeatable = notAllowed
+model.graphicLike = graphic | formula
+model.graphicLike_alternation = graphic | formula
+model.graphicLike_sequence = graphic, formula
+model.graphicLike_sequenceOptional = graphic?, formula?
+model.graphicLike_sequenceOptionalRepeatable = graphic*, formula*
+model.graphicLike_sequenceRepeatable = graphic+, formula+
+model.offsetLike = notAllowed
+model.offsetLike_alternation = notAllowed
+model.offsetLike_sequence = empty
+model.offsetLike_sequenceOptional = empty
+model.offsetLike_sequenceOptionalRepeatable = empty
+model.offsetLike_sequenceRepeatable = notAllowed
+model.pPart.msdesc =
+  catchwords
+  | dimensions
+  | heraldry
+  | locus
+  | locusGrp
+  | material
+  | objectType
+  | origDate
+  | origPlace
+  | secFol
+  | signatures
+  | stamp
+  | watermark
+model.pPart.msdesc_alternation =
+  catchwords
+  | dimensions
+  | heraldry
+  | locus
+  | locusGrp
+  | material
+  | objectType
+  | origDate
+  | origPlace
+  | secFol
+  | signatures
+  | stamp
+  | watermark
+model.pPart.msdesc_sequence =
+  catchwords,
+  dimensions,
+  heraldry,
+  locus,
+  locusGrp,
+  material,
+  objectType,
+  origDate,
+  origPlace,
+  secFol,
+  signatures,
+  stamp,
+  watermark
+model.pPart.msdesc_sequenceOptional =
+  catchwords?,
+  dimensions?,
+  heraldry?,
+  locus?,
+  locusGrp?,
+  material?,
+  objectType?,
+  origDate?,
+  origPlace?,
+  secFol?,
+  signatures?,
+  stamp?,
+  watermark?
+model.pPart.msdesc_sequenceOptionalRepeatable =
+  catchwords*,
+  dimensions*,
+  heraldry*,
+  locus*,
+  locusGrp*,
+  material*,
+  objectType*,
+  origDate*,
+  origPlace*,
+  secFol*,
+  signatures*,
+  stamp*,
+  watermark*
+model.pPart.msdesc_sequenceRepeatable =
+  catchwords+,
+  dimensions+,
+  heraldry+,
+  locus+,
+  locusGrp+,
+  material+,
+  objectType+,
+  origDate+,
+  origPlace+,
+  secFol+,
+  signatures+,
+  stamp+,
+  watermark+
+model.pPart.editorial = choice | abbr | expan | ex | am | subst
+model.pPart.editorial_alternation =
+  choice | abbr | expan | ex | am | subst
+model.pPart.editorial_sequence = choice, abbr, expan, ex, am, subst
+model.pPart.editorial_sequenceOptional =
+  choice?, abbr?, expan?, ex?, am?, subst?
+model.pPart.editorial_sequenceOptionalRepeatable =
+  choice*, abbr*, expan*, ex*, am*, subst*
+model.pPart.editorial_sequenceRepeatable =
+  choice+, abbr+, expan+, ex+, am+, subst+
+model.pPart.transcriptional =
+  sic
+  | corr
+  | reg
+  | orig
+  | add
+  | del
+  | unclear
+  | damage
+  | handShift
+  | supplied
+model.pPart.transcriptional_alternation =
+  sic
+  | corr
+  | reg
+  | orig
+  | add
+  | del
+  | unclear
+  | damage
+  | handShift
+  | supplied
+model.pPart.transcriptional_sequence =
+  sic, corr, reg, orig, add, del, unclear, damage, handShift, supplied
+model.pPart.transcriptional_sequenceOptional =
+  sic?,
+  corr?,
+  reg?,
+  orig?,
+  add?,
+  del?,
+  unclear?,
+  damage?,
+  handShift?,
+  supplied?
+model.pPart.transcriptional_sequenceOptionalRepeatable =
+  sic*,
+  corr*,
+  reg*,
+  orig*,
+  add*,
+  del*,
+  unclear*,
+  damage*,
+  handShift*,
+  supplied*
+model.pPart.transcriptional_sequenceRepeatable =
+  sic+,
+  corr+,
+  reg+,
+  orig+,
+  add+,
+  del+,
+  unclear+,
+  damage+,
+  handShift+,
+  supplied+
+model.pPart.edit = model.pPart.editorial | model.pPart.transcriptional
+model.pPart.edit_alternation =
+  model.pPart.editorial_alternation
+  | model.pPart.transcriptional_alternation
+model.pPart.edit_sequence =
+  model.pPart.editorial_sequence, model.pPart.transcriptional_sequence
+model.pPart.edit_sequenceOptional =
+  model.pPart.editorial_sequenceOptional?,
+  model.pPart.transcriptional_sequenceOptional?
+model.pPart.edit_sequenceOptionalRepeatable =
+  model.pPart.editorial_sequenceOptionalRepeatable*,
+  model.pPart.transcriptional_sequenceOptionalRepeatable*
+model.pPart.edit_sequenceRepeatable =
+  model.pPart.editorial_sequenceRepeatable+,
+  model.pPart.transcriptional_sequenceRepeatable+
+model.ptrLike = ref
+model.ptrLike_alternation = ref
+model.ptrLike_sequence = ref
+model.ptrLike_sequenceOptional = ref?
+model.ptrLike_sequenceOptionalRepeatable = ref*
+model.ptrLike_sequenceRepeatable = ref+
+model.lPart = notAllowed
+model.lPart_alternation = notAllowed
+model.lPart_sequence = empty
+model.lPart_sequenceOptional = empty
+model.lPart_sequenceOptionalRepeatable = empty
+model.lPart_sequenceRepeatable = notAllowed
+model.milestoneLike = gb | pb | lb | cb
+model.milestoneLike_alternation = gb | pb | lb | cb
+model.milestoneLike_sequence = gb, pb, lb, cb
+model.milestoneLike_sequenceOptional = gb?, pb?, lb?, cb?
+model.milestoneLike_sequenceOptionalRepeatable = gb*, pb*, lb*, cb*
+model.milestoneLike_sequenceRepeatable = gb+, pb+, lb+, cb+
+model.gLike = g
+model.oddDecl = notAllowed
+model.oddDecl_alternation = notAllowed
+model.oddDecl_sequence = empty
+model.oddDecl_sequenceOptional = empty
+model.oddDecl_sequenceOptionalRepeatable = empty
+model.oddDecl_sequenceRepeatable = notAllowed
+model.phrase.xml = notAllowed
+model.phrase.xml_alternation = notAllowed
+model.phrase.xml_sequence = empty
+model.phrase.xml_sequenceOptional = empty
+model.phrase.xml_sequenceOptionalRepeatable = empty
+model.phrase.xml_sequenceRepeatable = notAllowed
+model.specDescLike = notAllowed
+model.specDescLike_alternation = notAllowed
+model.specDescLike_sequence = empty
+model.specDescLike_sequenceOptional = empty
+model.specDescLike_sequenceOptionalRepeatable = empty
+model.specDescLike_sequenceRepeatable = notAllowed
+model.biblLike = bibl | biblStruct | listBibl | biblFull
+model.biblLike_alternation = bibl | biblStruct | listBibl | biblFull
+model.biblLike_sequence = bibl, biblStruct, listBibl, biblFull
+model.biblLike_sequenceOptional =
+  bibl?, biblStruct?, listBibl?, biblFull?
+model.biblLike_sequenceOptionalRepeatable =
+  bibl*, biblStruct*, listBibl*, biblFull*
+model.biblLike_sequenceRepeatable =
+  bibl+, biblStruct+, listBibl+, biblFull+
+model.headLike = head
+model.headLike_alternation = head
+model.headLike_sequence = head
+model.headLike_sequenceOptional = head?
+model.headLike_sequenceOptionalRepeatable = head*
+model.headLike_sequenceRepeatable = head+
+model.labelLike = notAllowed
+model.labelLike_alternation = notAllowed
+model.labelLike_sequence = empty
+model.labelLike_sequenceOptional = empty
+model.labelLike_sequenceOptionalRepeatable = empty
+model.labelLike_sequenceRepeatable = notAllowed
+model.listLike = \list | listWit | listPerson | listPlace | table
+model.listLike_alternation =
+  \list | listWit | listPerson | listPlace | table
+model.listLike_sequence = \list, listWit, listPerson, listPlace, table
+model.listLike_sequenceOptional =
+  \list?, listWit?, listPerson?, listPlace?, table?
+model.listLike_sequenceOptionalRepeatable =
+  \list*, listWit*, listPerson*, listPlace*, table*
+model.listLike_sequenceRepeatable =
+  \list+, listWit+, listPerson+, listPlace+, table+
+model.noteLike = note
+model.noteLike_alternation = note
+model.noteLike_sequence = note
+model.noteLike_sequenceOptional = note?
+model.noteLike_sequenceOptionalRepeatable = note*
+model.noteLike_sequenceRepeatable = note+
+model.lLike = l
+model.lLike_alternation = l
+model.lLike_sequence = l
+model.lLike_sequenceOptional = l?
+model.lLike_sequenceOptionalRepeatable = l*
+model.lLike_sequenceRepeatable = l+
+model.pLike = p | ab
+model.pLike_alternation = p | ab
+model.pLike_sequence = p, ab
+model.pLike_sequenceOptional = p?, ab?
+model.pLike_sequenceOptionalRepeatable = p*, ab*
+model.pLike_sequenceRepeatable = p+, ab+
+model.stageLike = notAllowed
+model.stageLike_alternation = notAllowed
+model.stageLike_sequence = empty
+model.stageLike_sequenceOptional = empty
+model.stageLike_sequenceOptionalRepeatable = empty
+model.stageLike_sequenceRepeatable = notAllowed
+model.eventLike = notAllowed
+model.global.edit = gap | app | witDetail | space
+model.global.edit_alternation = gap | app | witDetail | space
+model.global.edit_sequence = gap, app, witDetail, space
+model.global.edit_sequenceOptional = gap?, app?, witDetail?, space?
+model.global.edit_sequenceOptionalRepeatable =
+  gap*, app*, witDetail*, space*
+model.global.edit_sequenceRepeatable = gap+, app+, witDetail+, space+
+model.divPart = model.lLike | model.pLike | lg
+model.persStateLike = persName
+model.personLike = person
+model.personPart =
+  model.biblLike | model.eventLike | model.persStateLike | name | idno
+model.placeNamePart = placeName | country | settlement
+model.placeNamePart_alternation = placeName | country | settlement
+model.placeNamePart_sequence = placeName, country, settlement
+model.placeNamePart_sequenceOptional = placeName?, country?, settlement?
+model.placeNamePart_sequenceOptionalRepeatable =
+  placeName*, country*, settlement*
+model.placeNamePart_sequenceRepeatable =
+  placeName+, country+, settlement+
+model.placeStateLike = model.placeNamePart
+model.placeStateLike_alternation = model.placeNamePart_alternation
+model.placeStateLike_sequence = model.placeNamePart_sequence
+model.placeStateLike_sequenceOptional =
+  model.placeNamePart_sequenceOptional?
+model.placeStateLike_sequenceOptionalRepeatable =
+  model.placeNamePart_sequenceOptionalRepeatable*
+model.placeStateLike_sequenceRepeatable =
+  model.placeNamePart_sequenceRepeatable+
+model.publicationStmtPart.agency = publisher | authority
+model.publicationStmtPart.detail =
+  model.ptrLike | address | date | pubPlace | idno | availability
+model.availabilityPart = licence
+model.certLike = notAllowed
+model.descLike = notAllowed
+model.quoteLike = quote
+model.quoteLike_alternation = quote
+model.quoteLike_sequence = quote
+model.quoteLike_sequenceOptional = quote?
+model.quoteLike_sequenceOptionalRepeatable = quote*
+model.quoteLike_sequenceRepeatable = quote+
+model.attributable = model.quoteLike
+model.attributable_alternation = model.quoteLike_alternation
+model.attributable_sequence = model.quoteLike_sequence
+model.attributable_sequenceOptional = model.quoteLike_sequenceOptional?
+model.attributable_sequenceOptionalRepeatable =
+  model.quoteLike_sequenceOptionalRepeatable*
+model.attributable_sequenceRepeatable =
+  model.quoteLike_sequenceRepeatable+
+model.respLike = author | editor | respStmt
+model.divWrapper = notAllowed
+model.divTopPart = model.headLike
+model.divTop = model.divWrapper | model.divTopPart
+model.frontPart.drama = notAllowed
+model.pLike.front = head
+model.divBottomPart = notAllowed
+model.choicePart = sic | corr | reg | orig | unclear | abbr | expan
+model.imprintPart = publisher | biblScope | pubPlace
+model.addressLike = email | address
+model.addressLike_alternation = email | address
+model.addressLike_sequence = email, address
+model.addressLike_sequenceOptional = email?, address?
+model.addressLike_sequenceOptionalRepeatable = email*, address*
+model.addressLike_sequenceRepeatable = email+, address+
+model.nameLike =
+  model.nameLike.agent
+  | model.offsetLike
+  | model.placeStateLike
+  | idno
+  | model.persNamePart
+model.nameLike_alternation =
+  model.nameLike.agent_alternation
+  | model.offsetLike_alternation
+  | model.placeStateLike_alternation
+  | idno
+  | model.persNamePart_alternation
+model.nameLike_sequence =
+  model.nameLike.agent_sequence,
+  model.offsetLike_sequence,
+  model.placeStateLike_sequence,
+  idno,
+  model.persNamePart_sequence
+model.nameLike_sequenceOptional =
+  model.nameLike.agent_sequenceOptional?,
+  model.offsetLike_sequenceOptional?,
+  model.placeStateLike_sequenceOptional?,
+  idno?,
+  model.persNamePart_sequenceOptional?
+model.nameLike_sequenceOptionalRepeatable =
+  model.nameLike.agent_sequenceOptionalRepeatable*,
+  model.offsetLike_sequenceOptionalRepeatable*,
+  model.placeStateLike_sequenceOptionalRepeatable*,
+  idno*,
+  model.persNamePart_sequenceOptionalRepeatable*
+model.nameLike_sequenceRepeatable =
+  model.nameLike.agent_sequenceRepeatable+,
+  model.offsetLike_sequenceRepeatable+,
+  model.placeStateLike_sequenceRepeatable+,
+  idno+,
+  model.persNamePart_sequenceRepeatable+
+model.global = model.milestoneLike | model.noteLike | model.global.edit
+model.biblPart =
+  model.respLike
+  | model.imprintPart
+  | series
+  | citedRange
+  | bibl
+  | textLang
+  | extent
+  | availability
+  | msIdentifier
+  | explicit
+  | incipit
+  | decoNote
+model.frontPart = model.frontPart.drama | listBibl
+model.addrPart = model.nameLike | addrLine
+model.pPart.data =
+  model.dateLike
+  | model.measureLike
+  | model.addressLike
+  | model.nameLike
+model.pPart.data_alternation =
+  model.dateLike_alternation
+  | model.measureLike_alternation
+  | model.addressLike_alternation
+  | model.nameLike_alternation
+model.pPart.data_sequence =
+  model.dateLike_sequence,
+  model.measureLike_sequence,
+  model.addressLike_sequence,
+  model.nameLike_sequence
+model.pPart.data_sequenceOptional =
+  model.dateLike_sequenceOptional?,
+  model.measureLike_sequenceOptional?,
+  model.addressLike_sequenceOptional?,
+  model.nameLike_sequenceOptional?
+model.pPart.data_sequenceOptionalRepeatable =
+  model.dateLike_sequenceOptionalRepeatable*,
+  model.measureLike_sequenceOptionalRepeatable*,
+  model.addressLike_sequenceOptionalRepeatable*,
+  model.nameLike_sequenceOptionalRepeatable*
+model.pPart.data_sequenceRepeatable =
+  model.dateLike_sequenceRepeatable+,
+  model.measureLike_sequenceRepeatable+,
+  model.addressLike_sequenceRepeatable+,
+  model.nameLike_sequenceRepeatable+
+model.inter =
+  model.egLike
+  | model.oddDecl
+  | model.biblLike
+  | model.labelLike
+  | model.listLike
+  | model.stageLike
+  | model.attributable
+model.common = model.divPart | model.inter | q
+model.phrase =
+  model.segLike
+  | model.highlighted
+  | model.graphicLike
+  | model.pPart.msdesc
+  | model.pPart.edit
+  | model.ptrLike
+  | model.lPart
+  | model.phrase.xml
+  | model.specDescLike
+  | model.pPart.data
+model.paraPart =
+  model.gLike
+  | model.lLike
+  | model.global
+  | model.inter
+  | model.phrase
+  | lg
+model.limitedPhrase =
+  model.hiLike
+  | model.emphLike
+  | model.pPart.msdesc
+  | model.pPart.editorial
+  | model.ptrLike
+  | model.phrase.xml
+  | model.pPart.data
+model.divLike = \div
+model.divGenLike = notAllowed
+model.div1Like = notAllowed
+model.resource = \text | facsimile
+att.personal.attributes = att.naming.attributes
+model.placeLike = notAllowed
+p =
+  
+  ## (paragraphe) marque les paragraphes dans un texte en prose. [3.1. Paragraphs 7.2.5. Speech Contents]
+  element p {
+    macro.paraContent
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-p-abstractModel-structure-p-in-ab-or-p-constraint-report-6"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:p"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(ancestor::tei:ab or ancestor::tei:p) and not( ancestor::tei:floatingText |parent::tei:exemplum |parent::tei:item |parent::tei:note |parent::tei:q |parent::tei:quote |parent::tei:remarks |parent::tei:said |parent::tei:sp |parent::tei:stage |parent::tei:cell |parent::tei:figure )"
+             "\x{a}" ~
+             "        Abstract model violation: Paragraphs may not occur inside other paragraphs or ab elements.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-p-abstractModel-structure-p-in-l-or-lg-constraint-report-7"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:p"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(ancestor::tei:l or ancestor::tei:lg) and not( ancestor::tei:floatingText |parent::tei:figure |parent::tei:note )"
+             "\x{a}" ~
+             "        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.written.attributes,
+    empty
+  }
+emph =
+  
+  ## (mis en valeur) marque des mots ou des expressions qui sont accentués ou mis en valeur pour un motif linguistique ou rhétorique. [3.3.2.2. Emphatic Words and Phrases 3.3.2. Emphasis, Foreign Words, and Unusual Language]
+  element emph { macro.paraContent, att.global.attributes, empty }
+hi =
+  
+  ## (mis en évidence) distingue un mot ou une expression comme graphiquement distincte du texte environnant, sans en donner la raison. [3.3.2.2. Emphatic Words and Phrases 3.3.2. Emphasis, Foreign Words, and Unusual Language]
+  element hi {
+    macro.paraContent
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-hi-rend-obligatoire-transcriptions-constraint-assert-5"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:hi"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test =
+               "not(/tei:TEI[@type='ms']) or (/tei:TEI[@type='ms'] and not(//tei:hi[not(@rend)]) )"
+             "l'attribut @rend est obligatoire pour l'élément hi dans les\x{a}" ~
+             "                                        transcriptions de manuscrit"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attribute.xmlid,
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.written.attributes,
+    
+    ## (interprétation) indique comment l'élément en question a été rendu ou présenté dans le texte source
+    attribute rend {
+      list {
+        (
+         ## spécifie que le contenu est suscrit, lorsqu'aucun élément plus spécifique ne peut être utilisé.
+         "superscript"
+         | 
+           ## décrit une initiale de tout type
+           "initiale"
+         | 
+           ## spécifie qu'un élément est filigrané
+           "filigr"
+         | 
+           ## spécifie qu'un élément est peint
+           "peint"
+         | 
+           ## décrit une littera elongata
+           "litteraElongata"
+         | 
+           ## décrit une littera notabilior
+           "litteraNotabilior"
+         | 
+           ## précise qu'une initiale est détachée de ce qui suit par une espace
+           "detach"
+         | 
+           ## spécifie qu'une initiale occupe 2 l. de réglure
+           "2l"
+         | 
+           ## spécifie qu'une initiale occupe 4 l. de réglure
+           "4l"
+         | 
+           ## spécifie qu'une initiale occupe 5 l. de réglure
+           "5l")+
+      }
+    }?,
+    empty
+  }
+quote =
+  
+  ## (citation) contient une expression ou un passage que le narrateur ou l'auteur attribue à une origine extérieure au texte. [3.3.3. Quotation 4.3.1. Grouped Texts]
+  element quote {
+    macro.specialPara,
+    att.global.attributes,
+    att.typed.attributes,
+    att.msExcerpt.attributes,
+    att.notated.attributes,
+    empty
+  }
+q =
+  
+  ## (séparé du texte environnant par des guillemets) contient un fragment qui est marqué (visiblement) comme étant d’une manière ou d'une autre différent du texte environnant, pour diverses raisons telles que, par exemple, un discours direct ou une pensée, des termes techniques ou du jargon, une mise à distance par rapport à l’auteur, des citations empruntées et des passages qui sont mentionnés mais non employés. [3.3.3. Quotation]
+  element q {
+    (model.dateLike
+     | model.global
+     | model.hiLike
+     | model.nameLike.agent
+     | model.pPart.transcriptional
+     | model.segLike
+     | num
+     | placeName
+     | subst
+     | choice)+,
+    att.global.attributes,
+    att.ascribed.directed.attributes,
+    
+    ## (type) peut être utilisé pour indiquer si le passage cité correspond à une parole ou à une pensée ou encore pour le caractériser plus finement.
+    ## Suggested values include: 1] spoken (spoken); 2] thought (thought); 3] written (written); 4] soCalled (so called); 5] foreign (foreign); 6] distinct (distinct); 7] term; 8] emph (emph); 9] mentioned (mentioned)
+    attribute type {
+      
+      ## (spoken) notation du discours direct
+      "spoken"
+      | 
+        ## (thought) représentation de la pensée, par exemple un monologue intérieur.
+        "thought"
+      | 
+        ## (written) citation d'une source écrite
+        "written"
+      | 
+        ## (so called) distance prise par rapport à l'auteur
+        "soCalled"
+      | 
+        ## (foreign) mots étrangers
+        "foreign"
+      | 
+        ## (distinct) linguistiquement distinct
+        "distinct"
+      | 
+        ## terme technique
+        "term"
+      | 
+        ## (emph) mis en valeur par un procédé rhétorique.
+        "emph"
+      | 
+        ## (mentioned) métalinguistic, i.e. faisant référence à lui-même et non à son référent habituel.
+        "mentioned"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+mentioned =
+  
+  ## marque des mots ou des expressions employés métalinguistiquement [3.3.3. Quotation]
+  element mentioned { macro.phraseSeq, att.global.attributes, empty }
+term =
+  
+  ## (terme) contient un mot simple, un mot composé ou un symbole, qui est considéré comme un terme technique. [3.4.1. Terms and Glosses]
+  element term {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.pointing.attributes,
+    att.typed.attributes,
+    att.canonical.attributes,
+    att.sortable.attributes,
+    empty
+  }
+sic =
+  
+  ## (du latin, ainsi) contient du texte reproduit quoiqu'il est apparemment incorrect ou inexact [3.5.1. Apparent Errors]
+  element sic { macro.paraContent, att.global.attributes, empty }
+corr =
+  
+  ## (correction) contient la forme correcte d'un passage qui est considéré erroné dans la copie du texte. [3.5.1. Apparent Errors]
+  element corr {
+    macro.paraContent,
+    att.global.attributes,
+    att.editLike.attributes,
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    [ a:defaultValue = "editorial" ]
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+choice =
+  
+  ## (choix) regroupe un certain nombre de balisages alternatifs possibles pour un même endroit dans un texte. [3.5. Simple Editorial Changes]
+  element choice {
+    (model.choicePart, model.choicePart, model.choicePart*)
+    >> s:pattern [
+         id = "Manuscrit_Roi-choice-typeNote2-constraint-assert-6"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:choice"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test = "ancestor::tei:w or not(/tei:TEI[@type='transcr'])"
+             "Dans les transcriptions de manuscrits, choice ne doit pas\x{a}" ~
+             "                                        être utilisé à un niveau supérieur au mot."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    empty
+  }
+reg =
+  
+  ## (régularisation) contient une partie qui a été régularisée ou normalisée de façon quelconque [3.5.2. Regularization and
+  ## Normalization 12. Critical Apparatus]
+  element reg {
+    macro.paraContent,
+    att.global.attributes,
+    att.editLike.attributes,
+    att.typed.attributes,
+    empty
+  }
+orig =
+  
+  ## (forme originale) contient une partie notée comme étant fidèle à l'original et non pas normalisée ou corrigée. [3.5.2. Regularization and
+  ## Normalization 12. Critical Apparatus]
+  element orig { macro.paraContent, att.global.attributes, empty }
+gap =
+  
+  ## (omission) indique une omission dans une transcription, soit pour des raisons éditoriales décrites dans l'en-tête TEI au cours d’un échantillonnage, soit parce que le matériau est illisible ou inaudible. [3.5.3. Additions, Deletions, and Omissions]
+  element gap {
+    ((model.descLike | model.certLike)*)
+    >> s:pattern [
+         id = "Manuscrit_Roi-gap-typeNote3-constraint-assert-7"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:gap"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test = "@quantity or (@min and @max)"
+             "Une quantité\x{a}" ~
+             "                                        (@quantity) ou un intervalle (@min et @max) doit être\x{a}" ~
+             "                                        précisé pour l'élément gap"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.editLike.attributes,
+    att.dimensions.attribute.precision,
+    att.dimensions.attribute.scope,
+    att.ranging.attribute.atLeast,
+    att.ranging.attribute.atMost,
+    att.ranging.attribute.confidence,
+    
+    ## noms des unités utilisées pour la mesure.
+    attribute unit {
+      
+      ## (feuillet) 
+      "fol"
+      | 
+        ## (lignes) 
+        "lines"
+      | 
+        ## (caractère) 
+        "char"
+    },
+    
+    ## spécifie la longueur dans les unités indiquées
+    attribute quantity {
+      xsd:double
+      | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+      | xsd:decimal
+    }?,
+    
+    ## lorsque la mesure résume plus d'une observation, fournit la valeur minimum observée.
+    attribute min {
+      xsd:double
+      | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+      | xsd:decimal
+    }?,
+    
+    ## lorsque la mesure résume plus d'une observation, fournit la valeur maximum observée.
+    attribute max {
+      xsd:double
+      | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+      | xsd:decimal
+    }?,
+    
+    ## (reason) donne la raison de l'omission
+    attribute reason {
+      list {
+        (
+         ## difficulté de lecture du document
+         "illegible"
+         | 
+           ## dégât sur le document
+           "damage"
+         | 
+           ## problème dû au document de substitution
+           "facsimile"
+         | 
+           ## lacune matérielle
+           "lacuna"
+         | 
+           ## échantillonnage
+           "sampling")+
+      }
+    },
+    empty
+  }
+add =
+  
+  ## ( ajout) contient des lettres, des mots ou des phrases insérés dans le texte par un auteur, un copiste, un annotateur ou un correcteur. [3.5.3. Additions, Deletions, and Omissions]
+  element add {
+    macro.paraContent,
+    att.global.attributes,
+    att.transcriptional.attributes,
+    att.typed.attributes,
+    att.dimensions.attributes,
+    
+    ## specifie où cet item se trouve.
+    attribute place {
+      list {
+        (
+         ## (au-dessus) l'ajout a été fait au-dessus de la ligne
+         "above"
+         | 
+           ## (à la fin) l'ajout a été fait à la fin de la ligne
+           "end"
+         | 
+           ## (dans la ligne) l'ajout a été fait dans la ligne, par exemple à la suite d'une portion supprimée
+           "inline"
+         | 
+           ## (en lieu et place) l'ajout a été fait là où il doit s'insérer, par exemple dans une portion laissée blanche ou par dessus un texte gratté
+           "inplace"
+         | 
+           ## (marge) l'ajout a été fait dans la marge
+           "margin")+
+      }
+    },
+    empty
+  }
+del =
+  
+  ## (suppression) contient une lettre, un mot ou un passage supprimé, marqué comme supprimé, sinon indiqué comme superflu ou erroné dans le texte par un auteur, un copiste, un annotateur ou un correcteur. [3.5.3. Additions, Deletions, and Omissions]
+  element del {
+    macro.paraContent,
+    att.global.attribute.xmlid,
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.transcriptional.attributes,
+    att.typed.attributes,
+    att.dimensions.attributes,
+    
+    ## (interprétation) indique comment l'élément en question a été rendu ou présenté dans le texte source
+    attribute rend {
+      list {
+        (
+         ## précise que la suppression est matérialisée par une rature
+         "barré"
+         | 
+           ## précise que la suppression est matérialisée par une exponctuation
+           "exponctué"
+         | 
+           ## précise que le texte supprimé a été gratté
+           "gratté"
+         | 
+           ## précise que la suppression a été faite en repassant la séquence graphique concernée et en surimposant un nouveau texte. S'utilise généralement dans le cadre d'une combinaison avec subst.
+           "repassé")+
+      }
+    }
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-del-rend-repasse-only-in-subst-constraint-assert-8"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:del/@rend"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test =
+               "not(@rend='repassé') or (@rend='repassé' and parent::subst)"
+             "la valeur 'repassé' n'a de sens que dans une\x{a}" ~
+             "                                                substitution"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    empty
+  }
+unclear =
+  
+  ## (incertain) contient un mot, une expression ou bien un passage qui ne peut être transcrit avec certitude parce qu'il est illisible ou inaudible dans la source. [11.3.3.1. Damage, Illegibility, and Supplied Text 3.5.3. Additions, Deletions, and Omissions]
+  element unclear {
+    macro.paraContent,
+    att.global.attributes,
+    att.editLike.attributes,
+    att.dimensions.attributes,
+    
+    ## indique pourquoi il est difficile de transcrire le document
+    attribute reason {
+      list {
+        (
+         ## difficulté de lecture du document
+         "illegible"
+         | 
+           ## dégât sur le document
+           "damage"
+         | 
+           ## problème dû au document de substitution
+           "facsimile"
+         | 
+           ## difficulté due à la substance de la leçon (incompréhensible, aberrante, …)
+           "lectio")+
+      }
+    },
+    
+    ## lorsque la difficulté de transcription vient d'un dommage, catégorise la cause du dommage si celle-ci peut être identifiée
+    ## Sample values include: 1] rubbing; 2] mildew; 3] smoke
+    attribute agent {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+name =
+  
+  ## (nom, nom propre) contient un nom propre ou un syntagme nominal. [3.6.1. Referring Strings]
+  element name {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.personal.attributes,
+    att.datable.attributes,
+    att.editLike.attributes,
+    [
+      a:documentation [
+        "le typage des noms propres est obligatoire. Pour les cas qui le permettent, l'usage des éléments spécialisés "
+        ns1:code [ "<persName>" ]
+        " et "
+        ns1:code [ "<placeName>" ]
+        " est préférable."
+      ]
+    ]
+    attribute type {
+      
+      ##
+      "épée"
+      | 
+        ##
+        "cheval"
+      | 
+        ## caractérise une enseigne (Monjoie, Naimant, Malo, etc.).
+        "enseigne"
+      | 
+        ## caractérise le nom d'un cor ou d'un olifant (Dulce Joie, etc.).
+        "olifant"
+      | 
+        ## caractérise un nom donné à une plante supposée porteuse de vertus
+        "plante"
+      | 
+        ## caractérise le nom d'une fête calendaire
+        "fête"
+      | 
+        ## caractérise un peuple, au sens large (Sarrasins, Franceis, Danois, Païens, etc.).
+        "peuple"
+    },
+    empty
+  }
+email =
+  
+  ## (adresse de courrier électronique) contient l'adresse de courriel identifiant un emplacement où un courriel peut être envoyé. [3.6.2. Addresses]
+  element email { macro.phraseSeq, att.global.attributes, empty }
+address =
+  
+  ## (address) contient une adresse postale ou d'un autre type, par exemple l'adresse d'un éditeur, d'un organisme ou d'une personne. [3.6.2. Addresses 2.2.4. Publication, Distribution, Licensing, etc. 3.12.2.4. Imprint, Size of a Document, and Reprint Information]
+  element address {
+    (model.global*, (model.addrPart, model.global*)+),
+    att.global.attributes,
+    empty
+  }
+addrLine =
+  
+  ## (ligne d'adresse) contient une ligne d'adresse postale. [3.6.2. Addresses 2.2.4. Publication, Distribution, Licensing, etc. 3.12.2.4. Imprint, Size of a Document, and Reprint Information]
+  element addrLine { macro.phraseSeq, att.global.attributes, empty }
+num =
+  
+  ## (numéral) contient un nombre écrit sous une forme quelconque. [3.6.3. Numbers and
+  ## Measures]
+  element num {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.ranging.attributes,
+    
+    ## indique le type de valeur numérique
+    ## Suggested values include: 1] cardinal; 2] ordinal; 3] fraction; 4] percentage
+    attribute type {
+      
+      ## nombre entier ou décimal, par exemple 21, 21.5
+      "cardinal"
+      | 
+        ## nombre ordinal, par exemple 21ème
+        "ordinal"
+      | 
+        ## fraction, par exemple une moitié ou trois-quarts
+        "fraction"
+      | 
+        ## un pourcentage
+        "percentage"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    
+    ## fournit la valeur d'un nombre sous une forme normalisée.
+    attribute value {
+      xsd:double
+      | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+      | xsd:decimal
+    }?,
+    empty
+  }
+measure =
+  
+  ## (mesure) contient un mot ou une expression faisant référence à la quantité d'un objet ou d'un produit, comprenant en général un nombre, une unité et le nom d'un produit. [3.6.3. Numbers and
+  ## Measures]
+  element measure {
+    empty,
+    att.global.attributes,
+    att.measurement.attribute.unitRef,
+    att.measurement.attribute.commodity,
+    att.ranging.attributes,
+    
+    ## précise le type de mesure exprimée dans la typologie adaptée.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    
+    ## (unité) indique les unités de mesure utilisées ; il s'agit en général du symbole normalisé pour les unités dont on a besoin.
+    ## Suggested values include: 1] m (metre); 2] kg (kilogram); 3] s (second); 4] Hz (hertz); 5] Pa (pascal); 6] Ω (ohm); 7] L (litre); 8] t (tonne); 9] ha (hectare); 10] Å (ångström); 11] mL (millilitre); 12] cm (centimetre); 13] dB (decibel); 14] kbit (kilobit); 15] Kibit (kibibit); 16] kB (kilobyte); 17] KiB (kibibyte); 18] MB (megabyte); 19] MiB (mebibyte)
+    attribute unit {
+      
+      ## (mètre) unité SI (système international) de longueur
+      "m"
+      | 
+        ## (kilogramme) unité SI de masse
+        "kg"
+      | 
+        ## (seconde) unité SI de temps
+        "s"
+      | 
+        ## (hertz) unité SI de fréquence
+        "Hz"
+      | 
+        ## (pascal) unité SI de pression
+        "Pa"
+      | 
+        ## (ohm) unité SI de résistance électrique
+        "Ω"
+      | 
+        ## (litre) 1 dm³
+        "L"
+      | 
+        ## (tonne) 10³ kg
+        "t"
+      | 
+        ## (hectare) 1 hm²
+        "ha"
+      | 
+        ## (ångström) 10⁻¹⁰ m
+        "Å"
+      | 
+        ## (millilitre) 
+        "mL"
+      | 
+        ## (centimètre) 
+        "cm"
+      | 
+        ## (décibel) Voir remarques, ci-dessous.
+        "dB"
+      | 
+        ## (kilobit) 10³ ou 1000 bits
+        "kbit"
+      | 
+        ## (kibibit) 2¹⁰ ou 1024 bits
+        "Kibit"
+      | 
+        ## (kilo-octet) 10³ ou 1000 octets
+        "kB"
+      | 
+        ## (kibioctet) 2¹⁰ ou 1024 octets
+        "KiB"
+      | 
+        ## (mégaoctet) 10⁶ ou 1 000 000 octets
+        "MB"
+      | 
+        ## (mébioctet) 2²⁰ ou 1 048 576 octets
+        "MiB"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## (quantité) spécifie le nombre des unités indiquées que comprend la mesure.
+    attribute quantity {
+      xsd:double
+      | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+      | xsd:decimal
+    },
+    empty
+  }
+date =
+  
+  ## (date) contient une date exprimée dans n'importe quel format. [3.6.4. Dates and Times 2.2.4. Publication, Distribution, Licensing, etc. 2.6. The Revision Description 3.12.2.4. Imprint, Size of a Document, and Reprint Information 15.2.3. The Setting Description 13.4. Dates]
+  element date {
+    (text | model.gLike | model.phrase | model.global)*,
+    att.global.attributes,
+    att.canonical.attributes,
+    att.datable.attributes,
+    att.editLike.attributes,
+    att.dimensions.attributes,
+    att.typed.attributes,
+    empty
+  }
+abbr =
+  
+  ## (abréviation) contient une abréviation quelconque. [3.6.5. Abbreviations and Their Expansions]
+  element abbr {
+    macro.phraseSeq,
+    att.global.attributes,
+    
+    ## (type) permet à l'encodeur de caractériser l'abréviation selon une typologie adéquate
+    ## Sample values include: 1] suspension (suspension); 2] contraction (contraction); 3] brevigraph; 4] superscription (superscription); 5] acronym (acronym); 6] title (title); 7] organization (organization); 8] geographic (geographic)
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+expan =
+  
+  ## (expansion) contient l'expansion d'une abréviation. [3.6.5. Abbreviations and Their Expansions]
+  element expan {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.editLike.attributes,
+    empty
+  }
+ref =
+  
+  ## (référence) définit une référence vers un autre emplacement, la référence étant éventuellement modifiée ou complétée par un texte ou un commentaire. [3.7. Simple Links and Cross-References 16.1. Links]
+  element ref {
+    macro.paraContent
+    >> s:pattern [
+         id = "Manuscrit_Roi-ref-refAtts-constraint-report-8"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:ref"
+           "\x{a}" ~
+           "               "
+           s:report [
+             test = "@target and @cRef"
+             "Only one of the\x{a}" ~
+             "	attributes @target' and @cRef' may be supplied on "
+             s:name [ ]
+             "\x{a}" ~
+             "               "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.pointing.attributes,
+    att.typed.attributes,
+    empty
+  }
+\list =
+  
+  ## (liste) contient une suite d'items ordonnés dans une liste. [3.8. Lists]
+  element list {
+    ((model.divTop | model.global)*,
+     ((item, model.global*)+ | (model.global*, item, model.global*)+),
+     model.global*)
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-list-gloss-list-must-have-labels-constraint-rule-10"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:list[@type='gloss']"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "tei:label"
+             'The content of a "gloss" list should include a sequence of one or more pairs of a label element followed by an item element'
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.sortable.attributes,
+    
+    ## (type) describes the nature of the items in the list.
+    ## Suggested values include: 1] gloss (gloss); 2] index (index); 3] instructions (instructions); 4] litany (litany); 5] syllogism (syllogism)
+    attribute type {
+      [
+        a:documentation [
+          "(gloss) chaque item de la liste commente un terme ou un concept qui est donné par un élément "
+          ns1:code [ "<label>" ]
+          " précédant l'item de la liste."
+        ]
+      ]
+      "gloss"
+      | 
+        ## (index) each list item is an entry in an index such as the alphabetical topical index at the back of a print volume.
+        "index"
+      | 
+        ## (instructions) each list item is a step in a sequence of instructions, as in a recipe.
+        "instructions"
+      | 
+        ## (litany) each list item is one of a sequence of petitions, supplications or invocations, typically in a religious ritual.
+        "litany"
+      | 
+        ## (syllogism) each list item is part of an argument consisting of two or more propositions and a final conclusion derived from them.
+        "syllogism"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+item =
+  
+  ## (item) contient un composant d'une liste. [3.8. Lists 2.6. The Revision Description]
+  element item {
+    macro.specialPara,
+    att.global.attributes,
+    att.sortable.attributes,
+    empty
+  }
+head =
+  
+  ## (en-tête) contient tout type d'en-tête, par exemple le titre d'une section, ou l'intitulé d'une liste, d'un glossaire, d'une description de manuscrit, etc. [4.2.1. Headings and Trailers]
+  element head {
+    (text
+     | lg
+     | model.gLike
+     | model.phrase
+     | model.inter
+     | model.lLike
+     | model.global)*,
+    att.global.attributes,
+    att.typed.attributes,
+    att.placement.attributes,
+    att.written.attributes,
+    empty
+  }
+note =
+  
+  ## (note) contient une note ou une annotation [3.9.1. Notes and Simple Annotation 2.2.6. The Notes Statement 3.12.2.8. Notes and Statement of Language 9.3.5.4. Notes within Entries]
+  element note {
+    macro.specialPara
+    >> s:pattern [
+         id = "Manuscrit_Roi-note-typeNote-constraint-rule-11"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context =
+             "/tei:TEI[@type='ms' or @type = 'crit']/tei:text/tei:body//tei:note"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test = "@type"
+             "Les notes doivent être typées dans\x{a}" ~
+             "                                            les transcriptions de ms. ou éditions à nouveaux\x{a}" ~
+             "                                            frais."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.pointing.attributes,
+    att.written.attributes,
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      
+      ## caractérise une note de nature paléographique
+      "palaeographic"
+      | 
+        ## caractérise une note de nature linguistique
+        "linguistic"
+      | 
+        ## caractérise une note de nature littéraire
+        "litterary"
+      | 
+        ## caractérise une note de nature philologique
+        "tradition"
+      | 
+        ## caractérise une note relative à l'établissement du glossaire ou au commentaire du sens d'un mot
+        "glossary"
+    }?,
+    empty
+  }
+graphic =
+  
+  ## (graphic) indique l'emplacement d'une image, d'une illustration ou d'un schéma intégrés. [3.10. Graphics and Other Non-textual Components 11.1. Digital Facsimiles]
+  element graphic {
+    model.descLike*,
+    att.global.attributes,
+    att.resourced.attributes,
+    att.typed.attributes,
+    empty
+  }
+gb =
+  
+  ## (gathering beginning) (gathering begins) marque le début d'un nouveau cahier dans un manuscrit transcrit. [3.11.3. Milestone
+  ## Elements]
+  element gb {
+    empty,
+    att.global.facs.attributes,
+    att.global.attribute.xmlid,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.typed.attributes,
+    att.breaking.attributes,
+    att.edition.attributes,
+    
+    ## (nombre) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string },
+    empty
+  }
+pb =
+  
+  ## (début de page) marque le début d'une page de texte dans un document paginé. [3.11.3. Milestone
+  ## Elements]
+  element pb {
+    empty,
+    att.global.attribute.xmlid,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.typed.attributes,
+    att.edition.attributes,
+    att.breaking.attributes,
+    
+    ## (renvoie au feuillet du facsimile) pointe directement vers une image ou vers une partie d'une image correspondant au contenu de l'élément.
+    attribute facs {
+      list {
+        xsd:anyURI { pattern = "\S+" }+
+      }
+    },
+    
+    ## (nombre) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string },
+    empty
+  }
+lb =
+  
+  ## (début de ligne) marque le début d'une nouvelle ligne (typographique) dans une édition ou dans une version d'un texte. [3.11.3. Milestone
+  ## Elements 7.2.5. Speech Contents]
+  element lb {
+    empty,
+    att.global.facs.attributes,
+    att.global.attributes,
+    att.typed.attributes,
+    att.edition.attributes,
+    att.breaking.attributes,
+    empty
+  }
+cb =
+  
+  ## (début de colonne) marque le début d'une nouvelle colonne de texte sur une page multi-colonne. [3.11.3. Milestone
+  ## Elements]
+  element cb {
+    empty,
+    att.global.facs.attributes,
+    att.global.attribute.xmlid,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.typed.attributes,
+    att.edition.attributes,
+    att.breaking.attributes,
+    
+    ## (nombre) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string },
+    empty
+  }
+analytic =
+  
+  ## (niveau analytique) contient des éléments descriptifs qui décrivent la bibliographie d'une ressource (par exemple un poème ou un article de revue) publiée à l'intérieur d'une monographie ou d'une ressource et non publiée de façon indépendante. [3.12.2.1. Analytic, Monographic, and Series Levels]
+  element analytic {
+    (author
+     | editor
+     | respStmt
+     | title
+     | model.ptrLike
+     | date
+     | textLang
+     | idno
+     | availability)*,
+    att.global.attributes,
+    empty
+  }
+monogr =
+  
+  ## (niveau monographique) contient des données bibliographiques décrivant un objet (par exemple une monographie ou une revue) publié comme un élément indépendant (i.e. matériellement séparé. [3.12.2.1. Analytic, Monographic, and Series Levels]
+  element monogr {
+    ((((author | editor | respStmt),
+       (author | editor | respStmt)*,
+       title+,
+       (model.ptrLike | idno | textLang | editor | respStmt)*)
+      | ((title | model.ptrLike | idno)+,
+         (textLang | author | editor | respStmt)*)
+      | (authority, idno))?,
+     availability*,
+     model.noteLike*,
+     (idno | model.ptrLike | editor | respStmt)*,
+     imprint,
+     (imprint | extent | biblScope)*),
+    att.global.attributes,
+    empty
+  }
+series =
+  
+  ## (informations sur la série) contient une information sur la série dans laquelle une monographie ou un autre élément bibliographique ont paru. [3.12.2.1. Analytic, Monographic, and Series Levels]
+  element series {
+    (text
+     | model.gLike
+     | title
+     | model.ptrLike
+     | editor
+     | respStmt
+     | biblScope
+     | idno
+     | textLang
+     | model.global
+     | availability)*,
+    att.global.attributes,
+    empty
+  }
+author =
+  
+  ## (auteur) dans une référence bibliographique contient le nom de la (des) personne(s) physique(s) ou du collectif, auteur(s) d'une oeuvre ; par exemple dans la même forme que celle utilisée par une référence bibliographique reconnue. [3.12.2.2. Titles, Authors, and Editors 2.2.1. The Title Statement]
+  element author {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.naming.attributes,
+    att.datable.attributes,
+    empty
+  }
+editor =
+  
+  ## mention de responsabilité secondaire pour un item bibliographique, par exemple le nom d'une personne, d'une institution ou d'un organisme (ou de plusieurs d'entre eux) comme éditeur scientifique, compilateur, traducteur, etc. [3.12.2.2. Titles, Authors, and Editors]
+  element editor {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.naming.attributes,
+    att.datable.attributes,
+    empty
+  }
+respStmt =
+  
+  ## (mention de responsabilité) indique la responsabilité quant au contenu intellectuel d'un texte, d'une édition, d'un enregistrement ou d'une publication en série, lorsque les éléments spécifiques relatifs aux auteurs, éditeurs, etc. ne suffisent pas ou ne s'appliquent pas. [3.12.2.2. Titles, Authors, and Editors 2.2.1. The Title Statement 2.2.2. The Edition Statement 2.2.5. The Series Statement]
+  element respStmt {
+    (((resp+, model.nameLike.agent+) | (model.nameLike.agent+, resp+)),
+     note*),
+    att.global.attributes,
+    att.canonical.attributes,
+    empty
+  }
+resp =
+  
+  ## (responsabilité) contient une expression décrivant la nature de la responsabilité intellectuelle d'une personne. [3.12.2.2. Titles, Authors, and Editors 2.2.1. The Title Statement 2.2.2. The Edition Statement 2.2.5. The Series Statement]
+  element resp {
+    macro.phraseSeq.limited,
+    att.global.attributes,
+    att.canonical.attributes,
+    att.datable.attributes,
+    empty
+  }
+title =
+  
+  ## (titre) contient le titre complet d'une oeuvre quelconque [3.12.2.2. Titles, Authors, and Editors 2.2.1. The Title Statement 2.2.5. The Series Statement]
+  element title {
+    macro.paraContent,
+    att.global.attributes,
+    att.canonical.attributes,
+    att.datable.attributes,
+    
+    ## caractérise le titre selon une typologie adaptée.
+    attribute type {
+      
+      ## (titre principal) contient le titre principal et normalisé de l'œuvre
+      "main"
+      | 
+        ## (titre secondaire) contient le sous-titre de l'œuvre ou un titre secondaire (par exemple, le titre tel qu'il figure dans un manuscrit)
+        "sub"
+    }?,
+    
+    ## indique le niveau bibliographique d'un titre, c'est-à-dire si ce titre identifie un article, un livre, une revue, une collection, ou un document non publié
+    attribute level {
+      
+      ## (analytique) titre analytique (article, poème ou autre, publié comme partie d'un ensemble plus grand)
+      "a"
+      | 
+        ## (monographique) titre de monographie (livre, ensemble ou autre, publié comme un document distinct, y compris les volumes isolés d'ouvrages en plusieurs volumes)
+        "m"
+      | 
+        ## (journal) titre de revue
+        "j"
+      | 
+        ## (série) titre de publication en série
+        "s"
+      | 
+        ## (unpublished) titre de matéria non publié (thèses et dissertations comprises, à l'exception de leurs éditions commerciales)
+        "u"
+    }?,
+    empty
+  }
+imprint =
+  
+  ## regroupe des informations relatives à la publication ou à la distribution d'un élément bibliographique. [3.12.2.4. Imprint, Size of a Document, and Reprint Information]
+  element imprint {
+    (empty*,
+     ((model.imprintPart | model.dateLike), respStmt*, model.global*)+),
+    att.global.attributes,
+    empty
+  }
+publisher =
+  
+  ## (éditeur) donne le nom de l'organisme responsable de la publication ou de la distribution d'un élément de la bibliographie. [3.12.2.4. Imprint, Size of a Document, and Reprint Information 2.2.4. Publication, Distribution, Licensing, etc.]
+  element publisher {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.canonical.attributes,
+    empty
+  }
+biblScope =
+  
+  ## (extension d'une référence bibliographique) définit l'extension d'une référence bibliographique, comme par exemple une liste de numéros de page, ou le nom d'une subdivision d'une oeuvre plus grande. [3.12.2.5. Scopes and Ranges in Bibliographic Citations]
+  element biblScope {
+    macro.phraseSeq, att.global.attributes, att.citing.attributes, empty
+  }
+citedRange =
+  
+  ## (cited range) defines the range of cited content, often represented by pages or other units [3.12.2.5. Scopes and Ranges in Bibliographic Citations]
+  element citedRange {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.pointing.attributes,
+    att.citing.attributes,
+    empty
+  }
+pubPlace =
+  
+  ## (lieu de publication) contient le nom du lieu d'une publication. [3.12.2.4. Imprint, Size of a Document, and Reprint Information]
+  element pubPlace {
+    macro.phraseSeq, att.global.attributes, att.naming.attributes, empty
+  }
+bibl =
+  
+  ## (référence bibliographique.) contient une référence bibliographique faiblement structurée dans laquelle les sous-composants peuvent ou non être explicitement balisés. [3.12.1. Methods of Encoding Bibliographic References and Lists of References 2.2.7. The Source Description 15.3.2. Declarable Elements]
+  element bibl {
+    (text
+     | model.gLike
+     | model.highlighted
+     | model.pPart.data
+     | model.pPart.edit
+     | model.segLike
+     | model.ptrLike
+     | model.biblPart
+     | model.global)*,
+    att.global.attributes,
+    att.typed.attributes,
+    att.sortable.attributes,
+    att.docStatus.attributes,
+    empty
+  }
+biblStruct =
+  
+  ## (référence bibliographique structurée) contient une référence bibliographique dans laquelle seuls des sous-éléments bibliographiques apparaissent et cela, selon un ordre déterminé. [3.12.1. Methods of Encoding Bibliographic References and Lists of References 2.2.7. The Source Description 15.3.2. Declarable Elements]
+  element biblStruct {
+    (analytic*,
+     (monogr, series*)+,
+     (model.noteLike | model.ptrLike | citedRange)*),
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.typed.attributes,
+    att.sortable.attributes,
+    att.docStatus.attributes,
+    
+    ## (identifiant) fournit un identifiant unique pour l'élément qui porte l'attribut
+    attribute xml:id { xsd:ID },
+    empty
+  }
+listBibl =
+  
+  ## (liste de références bibliographiques) contient une liste de références bibliographiques de toute nature. [3.12.1. Methods of Encoding Bibliographic References and Lists of References 2.2.7. The Source Description 15.3.2. Declarable Elements]
+  element listBibl {
+    (model.headLike*,
+     (model.milestoneLike)*,
+     (model.biblLike+, (model.milestoneLike)*)+),
+    att.global.attributes,
+    att.sortable.attributes,
+    att.typed.attributes,
+    empty
+  }
+l =
+  
+  ## (versvers) contient un seul vers, éventuellement incomplet.contient un seul vers, éventuellement incomplet. [3.13.1. Core Tags for Verse 3.13. Passages of Verse or Drama 7.2.5. Speech Contents3.13.1. Core Tags for Verse 3.13. Passages of Verse or Drama 7.2.5. Speech Contents]
+  element l {
+    (text | model.gLike | model.phrase | model.inter | model.global)*,
+    ((model.dateLike
+      | model.global
+      | model.hiLike
+      | model.nameLike.agent
+      | model.pPart.transcriptional
+      | model.segLike
+      | num
+      | placeName
+      | subst
+      | choice)+)
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-l-abstractModel-structure-l-in-l-constraint-report-9"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:l"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "ancestor::tei:l[not(.//tei:note//tei:l[. = current()])]"
+             "\x{a}" ~
+             "        Abstract model violation: Lines may not contain lines or lg elements.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-l-abstractModel-structure-l-in-l-constraint-report-10"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:l"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "ancestor::tei:l[not(.//tei:note//tei:l[. = current()])]"
+             "\x{a}" ~
+             "        Abstract model violation: Lines may not contain lines or lg elements.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attribute.xmlid,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.metrical.attribute.real,
+    att.metrical.attribute.rhyme,
+    att.enjamb.attributes,
+    att.global.attribute.xmlid,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.metrical.attribute.real,
+    att.metrical.attribute.rhyme,
+    att.enjamb.attributes,
+    
+    ## (Précise le numéro de ligne de la strophe. Les valeurs
+    ##                                         sont libres.) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string },
+    
+    ## (contient le numéro du vers (obligatoire pour la version
+    ##                                         définitive de l'édition)) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string }?,
+    
+    ## (Précise le nombre de syllabe de la strophe. Les valeurs
+    ##                                         sont libres.) contient un encodage spécifié par l'utilisateur pour la structure métrique conventionnelle de l'élément.
+    attribute met { xsd:token },
+    
+    ## (Précise le numéro de ligne de la strophe. Les valeurs
+    ##                                         sont libres.) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string },
+    
+    ## (contient le numéro du vers (obligatoire pour la version
+    ##                                         définitive de l'édition)) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string }?,
+    
+    ## (Précise le nombre de syllabe de la strophe. Les valeurs
+    ##                                         sont libres.) contient un encodage spécifié par l'utilisateur pour la structure métrique conventionnelle de l'élément.
+    attribute met { xsd:token },
+    empty
+  }
+lg =
+  
+  ## (groupe de versgroupe de versgroupe de vers) contient un groupe de vers fonctionnant comme une unité formelle, par exemple une strophe, un refrain, un paragraphe en vers, etc.contient un groupe de vers fonctionnant comme une unité formelle, par exemple une strophe, un refrain, un paragraphe en vers, etc.contient un groupe de vers fonctionnant comme une unité formelle, par exemple une strophe, un refrain, un paragraphe en vers, etc. [3.13.1. Core Tags for Verse 3.13. Passages of Verse or Drama 7.2.5. Speech Contents3.13.1. Core Tags for Verse 3.13. Passages of Verse or Drama 7.2.5. Speech Contents3.13.1. Core Tags for Verse 3.13. Passages of Verse or Drama 7.2.5. Speech Contents]
+  element lg {
+    ((model.divTop | model.global)*,
+     (model.lLike | model.stageLike | model.labelLike | lg),
+     (model.lLike
+      | model.stageLike
+      | model.labelLike
+      | model.global
+      | lg)*,
+     model.global*),
+    ((model.divTop | model.global)*,
+     (model.lLike | model.stageLike | model.labelLike | lg),
+     (model.lLike
+      | model.stageLike
+      | model.labelLike
+      | model.global
+      | lg)*,
+     model.global*),
+    ((model.lLike
+      | lg
+      | model.global.edit
+      | model.milestoneLike
+      | model.noteLike)+)
+    >> s:pattern [
+         id = "Manuscrit_Roi-lg-atleast1oflggapl-constraint-assert-11"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:lg"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test =
+               "count(descendant::tei:lg|descendant::tei:l|descendant::tei:gap) > 0"
+             "An lg element\x{a}" ~
+             "        must contain at least one child l, lg, or gap element."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-lg-abstractModel-structure-lg-in-l-constraint-report-11"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:lg"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "ancestor::tei:l[not(.//tei:note//tei:lg[. = current()])]"
+             "\x{a}" ~
+             "        Abstract model violation: Lines may not contain line groups.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id = "Manuscrit_Roi-lg-atleast1oflggapl-constraint-assert-12"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:lg"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test =
+               "count(descendant::tei:lg|descendant::tei:l|descendant::tei:gap) > 0"
+             "An lg element\x{a}" ~
+             "        must contain at least one child l, lg, or gap element."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-lg-abstractModel-structure-lg-in-l-constraint-report-12"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:lg"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "ancestor::tei:l[not(.//tei:note//tei:lg[. = current()])]"
+             "\x{a}" ~
+             "        Abstract model violation: Lines may not contain line groups.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id = "Manuscrit_Roi-lg-atleast1oflggapl-constraint-assert-13"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:lg"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test =
+               "count(descendant::tei:lg|descendant::tei:l|descendant::tei:gap) > 0"
+             "An lg element\x{a}" ~
+             "        must contain at least one child l, lg, or gap element."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-lg-abstractModel-structure-lg-in-l-constraint-report-13"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:lg"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "ancestor::tei:l[not(.//tei:note//tei:lg[. = current()])]"
+             "\x{a}" ~
+             "        Abstract model violation: Lines may not contain line groups.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    
+    ## (identifiant) fournit un identifiant unique pour l'élément qui porte l'attribut
+    attribute xml:id { xsd:ID }?,
+    
+    ## (Précise le numéro de la strophe. Les valeurs sont
+    ##                                         libres.) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string },
+    
+    ## (Précise qu'il s'agit d'un texte lyrique.) caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## (Précise qu'il s'agit d'une strophe.) caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      
+      ## caractérise le groupe de vers comme constituant une laisse.
+      "laisse"
+    },
+    
+    ## (identifiant) fournit un identifiant unique pour l'élément qui porte l'attribut
+    attribute xml:id { xsd:ID }?,
+    
+    ## (Précise le numéro de la strophe. Les valeurs sont
+    ##                                         libres.) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string },
+    
+    ## (Précise qu'il s'agit d'un texte lyrique.) caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## (Précise qu'il s'agit d'une strophe.) caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      
+      ## caractérise le groupe de vers comme constituant une laisse.
+      "laisse"
+    },
+    
+    ## (identifiant) fournit un identifiant unique pour l'élément qui porte l'attribut
+    attribute xml:id { xsd:ID }?,
+    
+    ## (Précise le numéro de la strophe. Les valeurs sont
+    ##                                         libres.) donne un nombre (ou une autre étiquette) pour un élément, qui n'est pas nécessairement unique dans le document TEI.
+    attribute n { xsd:string },
+    
+    ## (Précise qu'il s'agit d'un texte lyrique.) caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## (Précise qu'il s'agit d'une strophe.) caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      
+      ## caractérise le groupe de vers comme constituant une laisse.
+      "laisse"
+    },
+    empty
+  }
+textLang =
+  [
+    a:documentation [
+      "(langues du texte) décrit les langues et systèmes d'écriture utilisés dans un manuscrit (et non dans la description du manuscrit, dont les langues et systèmes d'écriture sont décrits dans l'élément "
+      ns1:code [ "<langUsage>" ]
+      "). [3.12.2.4. Imprint, Size of a Document, and Reprint Information 10.6.6. Languages and Writing Systems]"
+    ]
+  ]
+  element textLang {
+    macro.specialPara,
+    att.global.attributes,
+    
+    ## (langue principale) contient un code identifiant la langue principale du manuscrit.
+    attribute mainLang {
+      xsd:language
+      | (
+         ##
+         "")
+    },
+    
+    ## (autres langues) contient un ou plusieurs codes identifiant toute autre langue utilisée dans le manuscrit.
+    attribute otherLangs {
+      list {
+        (xsd:language
+         | (
+            ##
+            ""))*
+      }
+    }?,
+    empty
+  }
+teiHeader =
+  
+  ## (en-tête TEI) fournit des informations descriptives et déclaratives qui constituent une page de titre électronique au début de tout texte conforme à la TEI. [2.1.1. The TEI Header and Its Components 15.1. Varieties of Composite Text]
+  element teiHeader {
+    (fileDesc, profileDesc, revisionDesc), att.global.attributes, empty
+  }
+fileDesc =
+  
+  ## (description bibliographique du fichier) contient une description bibliographique complète du fichier électronique. [2.2. The File Description 2.1.1. The TEI Header and Its Components]
+  element fileDesc {
+    (titleStmt, publicationStmt, sourceDesc),
+    att.global.attributes,
+    empty
+  }
+titleStmt =
+  
+  ## (mention de titre) regroupe les informations sur le titre d’une œuvre et les personnes ou institutions responsables de son contenu intellectuel. [2.2.1. The Title Statement 2.2. The File Description]
+  element titleStmt {
+    (title+, model.respLike*), att.global.attributes, empty
+  }
+extent =
+  
+  ## (étendue) décrit la taille approximative d’un texte stocké sur son support, numérique ou non numérique, exprimé dans une unité quelconque appropriée. [2.2.3. Type and Extent of File 2.2. The File Description 3.12.2.4. Imprint, Size of a Document, and Reprint Information 10.7.1. Object Description]
+  element extent { measure+, att.global.attributes, empty }
+publicationStmt =
+  
+  ## (mention de publication) regroupe des informations concernant la publication ou la diffusion d’un texte électronique ou d’un autre type de texte. [2.2.4. Publication, Distribution, Licensing, etc. 2.2. The File Description]
+  element publicationStmt {
+    (model.publicationStmtPart.agency,
+     model.publicationStmtPart.detail+),
+    att.global.attributes,
+    empty
+  }
+authority =
+  
+  ## (responsable de la publication.) donne le nom de la personne ou de l'organisme responsable de la publication d’un fichier électronique, autre qu’un éditeur ou un distributeur. [2.2.4. Publication, Distribution, Licensing, etc.]
+  element authority {
+    macro.phraseSeq.limited,
+    att.global.attributes,
+    att.canonical.attributes,
+    empty
+  }
+idno =
+  
+  ## (identifiant) donne un identifiant standardisé qui peut être utilisé pour identifier une référence bibliographique, une personne, un titre d'ouvrage ou une organisation. [13.3.1. Basic Principles 2.2.4. Publication, Distribution, Licensing, etc. 2.2.5. The Series Statement 3.12.2.4. Imprint, Size of a Document, and Reprint Information]
+  element idno {
+    (text | model.gLike | idno)*,
+    att.global.attributes,
+    att.sortable.attributes,
+    att.datable.attributes,
+    
+    ## classe un numéro dans une catégorie, par exemple comme étant un numéro ISBN ou comme appartenant une autre série normalisée.
+    ## Suggested values include: 1] ISBN; 2] ISSN; 3] DOI; 4] URI; 5] VIAF; 6] ESTC; 7] OCLC
+    attribute type {
+      [
+        a:documentation [
+          "International Standard Book Number: a 13- or (if assigned prior to 2007) 10-digit identifying number assigned by the publishing industry to a published book or similar item, registered with the "
+          ns1:a [
+            href = "https://www.isbn-international.org"
+            " International ISBN Agency."
+          ]
+          "\x{a}" ~
+          "                  "
+        ]
+      ]
+      "ISBN"
+      | 
+        ## International Standard Serial Number: an eight-digit number to uniquely identify a serial publication.
+        "ISSN"
+      | 
+        ## Digital Object Identifier: a unique string of letters and numbers assigned to an electronic document.
+        "DOI"
+      | [
+          a:documentation [
+            "Uniform Resource Identifier: a string of characters to uniquely identify a resource, following the syntax of "
+            ns1:a [
+              href = "https://datatracker.ietf.org/doc/html/rfc3986"
+              "RFC 3986"
+            ]
+            "."
+          ]
+        ]
+        "URI"
+      | 
+        ## A data number in the Virtual Internet Authority File assigned to link different names in catalogs around the world for the same entity.
+        "VIAF"
+      | 
+        ## English Short-Title Catalogue number: an identifying number assigned to a document in English printed in the British Isles or North America before 1801.
+        "ESTC"
+      | 
+        ## OCLC control number (record number) for the union catalog record in WorldCat, a union catalog for member libraries in the Online Computer Library Center global cooperative.
+        "OCLC"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+availability =
+  
+  ## (disponibilité) renseigne sur la disponibilité du texte, par exemple sur toutes restrictions quant à son usage ou sa diffusion, son copyright, etc. [2.2.4. Publication, Distribution, Licensing, etc.]
+  element availability {
+    (model.availabilityPart | model.pLike)+,
+    att.global.attributes,
+    
+    ## (status) donne un code caractérisant la disponibilité actuelle d’un texte.
+    attribute status {
+      
+      ## (free) Le texte est libre de droits.
+      "free"
+      | 
+        ## (unknown) Le statut du texte est inconnu.
+        "unknown"
+      | 
+        ## (restricted) le texte est sous droits.
+        "restricted"
+    }?,
+    empty
+  }
+licence =
+  
+  ## contient des informations légales applicables au texte, notamment le contrat de licence définissant les droits d'utilisation. [2.2.4. Publication, Distribution, Licensing, etc.]
+  element licence {
+    macro.specialPara,
+    att.global.attributes,
+    att.pointing.attributes,
+    att.datable.attributes,
+    empty
+  }
+sourceDesc =
+  
+  ## (description de la source) décrit la source à partir de laquelle un texte électronique a été dérivé ou produit, habituellement une description bibliographique pour un texte numérisé, ou une expression comme "document numérique natif " pour un texte qui n'a aucune existence précédente. [2.2.7. The Source Description]
+  element sourceDesc {
+    (biblStruct | biblFull | msDesc), att.global.attributes, empty
+  }
+biblFull =
+  
+  ## (référence bibliographique totalement structurée) contient une référence bibliographique totalement structurée : tous les composants de la description du fichier TEI y sont présents. [3.12.1. Methods of Encoding Bibliographic References and Lists of References 2.2. The File Description 2.2.7. The Source Description 15.3.2. Declarable Elements]
+  element biblFull {
+    (((titleStmt, extent?, publicationStmt), sourceDesc*)
+     | (fileDesc, profileDesc)),
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.sortable.attributes,
+    att.docStatus.attributes,
+    
+    ## (identifiant) fournit un identifiant unique pour l'élément qui porte l'attribut
+    attribute xml:id { xsd:ID },
+    empty
+  }
+profileDesc =
+  
+  ## (description du profil) fournit une description détaillée des aspects non bibliographiques du texte, notamment les langues utilisées et leurs variantes, les circonstances de sa production, les collaborateurs et leur statut. [2.4. The Profile Description 2.1.1. The TEI Header and Its Components]
+  element profileDesc {
+    (creation, langUsage), att.global.attributes, empty
+  }
+handNote =
+  
+  ## (note sur une main) décrit un style d'écriture ou une main qui sont reconnus dans un manuscrit. [10.7.2. Writing, Decoration, and Other Notations]
+  element handNote {
+    macro.specialPara,
+    att.global.attributes,
+    att.handFeatures.attributes,
+    empty
+  }
+creation =
+  
+  ## (création) contient des informations concernant la création d’un texte. [2.4.1. Creation 2.4. The Profile Description]
+  element creation {
+    ((origPlace | origDate)+)
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-creation-change-when-or-from-to-constraint-assert-14"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:creation"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test =
+               "tei:origPlace[@type='lieuComposition']                                      and tei:origDate[@type='dateComposition']                                      and tei:origPlace[@type='lieuManuscrit']                                      and tei:origDate[@type='dateManuscrit']"
+             "Date et lieu de composition du texte ainsi que du manuscrit\x{a}" ~
+             "                                        doivent être spécifiés. "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.datable.attributes,
+    empty
+  }
+langUsage =
+  
+  ## (langue utilisée) décrit les langues, variétés de langues, registres, dialectes, etc. présents à l’intérieur d’un texte. [2.4.2. Language Usage 2.4. The Profile Description 15.3.2. Declarable Elements]
+  element langUsage {
+    (model.pLike+ | language+), att.global.attributes, empty
+  }
+language =
+  
+  ## (langue) caractérise une langue ou une variété de langue utilisée dans un texte. [2.4.2. Language Usage]
+  element language {
+    macro.phraseSeq.limited,
+    att.global.attribute.xmlid,
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.source.attribute.source,
+    
+    ## (certitude) donne le degré de certitude associée à l'intervention ou à l'interprétation.
+    attribute cert {
+      xsd:double
+      | (
+         ##
+         "high"
+         | 
+           ##
+           "medium"
+         | 
+           ##
+           "low"
+         | 
+           ##
+           "unknown")
+    },
+    
+    ## (responsable) indique l'agent responsable de l'intervention ou de l'interprétation, par exemple un éditeur ou un transcripteur.
+    attribute resp {
+      list {
+        xsd:anyURI { pattern = "\S+" }+
+      }
+    },
+    [
+      a:documentation [
+        "(identificateur) fournit un code de langue issu de la recommandation "
+        ns1:a [ href = "https://tools.ietf.org/html/bcp47" "BCP 47" ]
+        " (ou son successeur) utilisé pour identifier la langue précisée par cet élément, référencé par l’attribut global "
+        ns1:code [ "@xml:lang" ]
+        " s’appliquant à l’élément considéré."
+      ]
+    ]
+    attribute ident {
+      xsd:language
+      | (
+         ##
+         "")
+    },
+    
+    ## précise approximativement le pourcentage du volume de texte utilisant cette langue.
+    attribute usage { xsd:nonNegativeInteger },
+    empty
+  }
+revisionDesc =
+  
+  ## (descriptif des révisions) fournit un résumé de l’historique des révisions d’un fichier. [2.6. The Revision Description 2.1.1. The TEI Header and Its Components]
+  element revisionDesc {
+    change+, att.global.attributes, att.docStatus.attributes, empty
+  }
+change =
+  
+  ## (change) résume une modification ou une correction apportée à une version particulière d’un texte électronique partagé entre plusieurs chercheurs. [2.6. The Revision Description 2.4.1. Creation 11.7. Identifying Changes and Revisions]
+  element change {
+    macro.specialPara
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-change-change-when-or-from-to-2-constraint-assert-15"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:change"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test = "@when or (@from and @to)"
+             "La date du changement\x{a}" ~
+             "                                        doit être spécifiée"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.datable.attributes,
+    att.docStatus.attributes,
+    att.global.attributes,
+    att.typed.attributes,
+    
+    ## indique la personne ou le groupe de personnes à qui le contenu de l'élément est attribué.
+    attribute who {
+      list {
+        xsd:anyURI { pattern = "\S+" }+
+      }
+    },
+    
+    ## (target) points to one or more elements that belong to this change.
+    attribute target {
+      list {
+        xsd:anyURI { pattern = "\S+" }+
+      }
+    }?,
+    empty
+  }
+scriptNote =
+  
+  ## describes a particular script distinguished within the description of a manuscript or similar resource. [10.7.2. Writing, Decoration, and Other Notations]
+  element scriptNote {
+    macro.specialPara,
+    att.global.attributes,
+    att.handFeatures.attributes,
+    empty
+  }
+TEI =
+  [
+    a:documentation [
+      "(document TEI) contient un seul document conforme à la TEI, qui comprend un en-tête TEI et un texte, soit de façon isolée, soit comme partie d’un élément "
+      ns1:code [ "<teiCorpus>" ]
+      ". [4. Default Text Structure 15.1. Varieties of Composite Text]"
+    ]
+  ]
+  element TEI {
+    (teiHeader,
+     ((model.resource+, TEI*) | TEI+))
+    >> sch:ns [ prefix = "tei" uri = "http://www.tei-c.org/ns/1.0" ]
+    >> sch:ns [ prefix = "xs" uri = "http://www.w3.org/2001/XMLSchema" ]
+    >> sch:ns [
+         prefix = "rng"
+         uri = "http://relaxng.org/ns/structure/1.0"
+       ],
+    att.global.attribute.n,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    
+    ## (identifiant) fournit un identifiant unique au document (composé du mot-clé ed pour une édition numérisée, transcr pour une transcription de manuscrit, crit pour une édition critique ; du nom du texte, sous une forme standard ; et du sigle du manuscrit, ou celui attribué au texte critique ou, pour une édition, du sigle de l'édition, voir )
+    attribute xml:id { xsd:ID },
+    [
+      a:documentation [
+        "(langue) indique la langue du contenu de l'élément en utilisant les codes du "
+        ns1:a [
+          href = "http://www.ietf.org/rfc/rfc3066.txt"
+          "RFC 3066"
+        ]
+        "\x{a}" ~
+        "            "
+      ]
+    ]
+    attribute xml:lang {
+      xsd:language
+      | (
+         ##
+         "")
+    },
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      
+      ## (édition) précise que le document contient une édition numérisée
+      "ed"
+      | 
+        ## (transcription) précise que le document contient une transcription de témoin
+        "transcr"
+      | 
+        ## (texte critique) précise que le document contient un apparat de variantes permettant la restitution d'un ou plusieurs textes critiques
+        "crit"
+      | 
+        ## (manuscrit) précise que le document contient la description d'un manuscrit
+        "ms"
+    },
+    
+    ## la version majeure du schéma TEI
+    [ a:defaultValue = "5" ]
+    attribute version {
+      xsd:token { pattern = "[\d]+(\.[\d]+){0,2}" }
+    }?,
+    empty
+  }
+\text =
+  
+  ## (texte) contient un seul texte quelconque, simple ou composite, par exemple un poème ou une pièce de théâtre, un recueil d’essais, un roman, un dictionnaire ou un échantillon de corpus. [4. Default Text Structure 15.1. Varieties of Composite Text]
+  element text {
+    (model.global*,
+     (front, model.global*)?,
+     (body),
+     model.global*,
+     (back, model.global*)?),
+    att.global.attribute.xmlid,
+    att.global.attribute.n,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.typed.attributes,
+    att.written.attributes,
+    [
+      a:documentation [
+        "(langue) indique la langue du contenu de l'élément en utilisant les codes du "
+        ns1:a [
+          href = "http://www.ietf.org/rfc/rfc3066.txt"
+          "RFC 3066"
+        ]
+        "\x{a}" ~
+        "            "
+      ]
+    ]
+    attribute xml:lang {
+      xsd:language
+      | (
+         ##
+         "")
+    },
+    empty
+  }
+body =
+  
+  ## (corps du texte) contient la totalité du corps d’un seul texte simple, à l’exclusion de toute partie pré- ou post-liminaire. [4. Default Text Structure]
+  element body {
+    (model.global*,
+     (model.divTop, (model.global | model.divTop)*)?,
+     (model.divGenLike, (model.global | model.divGenLike)*)?,
+     ((model.divLike, (model.global | model.divGenLike)*)+
+      | (model.div1Like, (model.global | model.divGenLike)*)+
+      | (((model.common), model.global*)+,
+         ((model.divLike, (model.global | model.divGenLike)*)+
+          | (model.div1Like, (model.global | model.divGenLike)*)+)?)),
+     model.global*),
+    att.global.attributes,
+    empty
+  }
+\div =
+  
+  ## (division du textedivision du texte) contient une subdivision dans le texte préliminaire, dans le corps d’un texte ou dans le texte postliminaire.contient une subdivision dans le texte préliminaire, dans le corps d’un texte ou dans le texte postliminaire. [4.1. Divisions of the Body4.1. Divisions of the Body]
+  element div {
+    ((model.divTop | model.global)*,
+     ((((model.divLike | model.divGenLike), model.global*)+
+       | (((model.common), model.global*)+,
+          ((model.divLike | model.divGenLike), model.global*)*)),
+      model.global*)?),
+    ((model.divTop | model.global)*,
+     ((((model.divLike | model.divGenLike), model.global*)+
+       | (((model.common), model.global*)+,
+          ((model.divLike | model.divGenLike), model.global*)*)),
+      model.global*)?)
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-div-abstractModel-structure-div-in-l-or-lg-constraint-report-14"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:div"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(ancestor::tei:l or ancestor::tei:lg) and not(ancestor::tei:floatingText)"
+             "\x{a}" ~
+             "        Abstract model violation: Lines may not contain higher-level structural elements such as div, unless div is a descendant of floatingText.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-div-abstractModel-structure-div-in-ab-or-p-constraint-report-15"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:div"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(ancestor::tei:p or ancestor::tei:ab) and not(ancestor::tei:floatingText)"
+             "\x{a}" ~
+             "        Abstract model violation: p and ab may not contain higher-level structural elements such as div, unless div is a descendant of floatingText.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-div-abstractModel-structure-div-in-l-or-lg-constraint-report-16"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:div"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(ancestor::tei:l or ancestor::tei:lg) and not(ancestor::tei:floatingText)"
+             "\x{a}" ~
+             "        Abstract model violation: Lines may not contain higher-level structural elements such as div, unless div is a descendant of floatingText.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-div-abstractModel-structure-div-in-ab-or-p-constraint-report-17"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:div"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(ancestor::tei:p or ancestor::tei:ab) and not(ancestor::tei:floatingText)"
+             "\x{a}" ~
+             "        Abstract model violation: p and ab may not contain higher-level structural elements such as div, unless div is a descendant of floatingText.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.written.attributes,
+    att.global.attributes,
+    att.written.attributes,
+    
+    ## (Décrit une section thématique du Manuscrit du Roi. Les
+    ##                                         valeurs sont libres.) caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    ## Suggested values include: 1] page_de_titre; 2] preface; 3] sommaire; 4] errata; 5] notes_et_variantes
+    attribute type {
+      
+      ##
+      "page_de_titre"
+      | 
+        ##
+        "preface"
+      | 
+        ##
+        "sommaire"
+      | 
+        ##
+        "errata"
+      | 
+        ##
+        "notes_et_variantes"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    
+    ## (Décrit une section thématique du Manuscrit du Roi. Les
+    ##                                         valeurs sont libres.) caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    ## Suggested values include: 1] page_de_titre; 2] preface; 3] sommaire; 4] errata; 5] notes_et_variantes
+    attribute type {
+      
+      ##
+      "page_de_titre"
+      | 
+        ##
+        "preface"
+      | 
+        ##
+        "sommaire"
+      | 
+        ##
+        "errata"
+      | 
+        ##
+        "notes_et_variantes"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+front =
+  
+  ## (texte préliminaire) contient tout ce qui est au début du document, avant le corps du texte : page de titre, dédicaces, préfaces, etc. [4.6. Title Pages 4. Default Text Structure]
+  element front {
+    ((model.frontPart
+      | model.pLike
+      | model.pLike.front
+      | model.global)*,
+     (((model.div1Like,
+        (model.div1Like | model.frontPart | model.global)*)
+       | (model.divLike,
+          (model.divLike | model.frontPart | model.global)*)),
+      (model.global)*)?),
+    att.global.attributes,
+    empty
+  }
+back =
+  
+  ## (texte annexe) contient tout supplément placé après la partie principale d'un texte : appendice, etc. [4.7. Back Matter 4. Default Text Structure]
+  element back {
+    ((model.frontPart
+      | model.pLike.front
+      | model.pLike
+      | model.listLike
+      | model.global)*,
+     ((model.div1Like,
+       (model.frontPart | model.div1Like | model.global)*)
+      | (model.divLike,
+         (model.frontPart | model.divLike | model.global)*))?,
+     (model.divBottomPart, (model.divBottomPart | model.global)*)?),
+    att.global.attributes,
+    empty
+  }
+att.metrical.attributes =
+  att.metrical.attribute.met,
+  att.metrical.attribute.real,
+  att.metrical.attribute.rhyme
+att.metrical.attribute.met =
+  
+  ## (structure métrique, canonique) contient un encodage spécifié par l'utilisateur pour la structure métrique conventionnelle de l'élément.
+  attribute met { xsd:token }?
+att.metrical.attribute.real =
+  
+  ## (structure métrique réelle) contient un encodage, spécifié par l'utilisateur, de la réalisation effective de la structure métrique conventionnelle applicable à l'élément.
+  attribute real { xsd:token }?
+att.metrical.attribute.rhyme =
+  
+  ## (schéma rimique) spécifie quel schéma de rimes a été appliqué à un groupe de lignes versifiées.
+  attribute rhyme { xsd:token }?
+att.enjamb.attributes = att.enjamb.attribute.enjamb
+att.enjamb.attribute.enjamb =
+  
+  ## ( enjambement) indique que la fin d'un vers est marqué par un enjambement.
+  ## Sample values include: 1] no; 2] yes; 3] weak; 4] strong
+  attribute enjamb {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+model.rdgPart = wit | lacunaStart | lacunaEnd
+att.rdgPart.attributes = att.rdgPart.attribute.wit
+att.rdgPart.attribute.wit =
+  
+  ## (témoin ou témoins) contient une liste d'une ou plusieurs abréviations désignant les témoins qui commencent ou finissent à ce point.
+  attribute wit {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.witnessed.attributes = att.witnessed.attribute.wit
+att.witnessed.attribute.wit =
+  
+  ## (témoin ou témoins) contient une liste comprenant un ou plusieurs pointeurs qui désignent les témoins attestant d'une leçon donnée.
+  attribute wit {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.textCritical.attributes =
+  att.written.attributes,
+  att.textCritical.attribute.type,
+  att.textCritical.attribute.cause,
+  att.textCritical.attribute.varSeq,
+  att.textCritical.attribute.require
+att.textCritical.attribute.type =
+  
+  ## établit une classification de la leçon selon une typologie utile.
+  ## Sample values include: 1] substantive (substantive); 2] orthographic (orthographic)
+  attribute type {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.textCritical.attribute.cause =
+  
+  ## établit une classification de la cause d'une variante de leçon, selon une typologie appropriée aux origines possibles de cette variation.
+  ## Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion; 4] haplography; 5] dittography; 6] falseEmendation
+  attribute cause {
+    xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+  }?
+att.textCritical.attribute.varSeq =
+  
+  ## (position de la variante dans une séquence) fournit un nombre indiquant la position de la leçon dans une séquence, lorsqu'on peut supposer un ordre pour les variantes de chaque lemme.
+  attribute varSeq { xsd:nonNegativeInteger }?
+att.textCritical.attribute.require =
+  
+  ## points to other readings that are required when adopting the current reading or lemma.
+  attribute require {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+app =
+  
+  ## (entrée d'apparat critique) contient une entrée dans un apparat critique, constituée d'un lemme facultatif et d'au moins une leçon. [12.1.1. The Apparatus Entry]
+  element app {
+    ((lem?, rdg*)+, witDetail*, note*),
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    
+    ## (identifiant) fournit un identifiant unique pour l'élément qui porte l'attribut
+    attribute xml:id { xsd:ID }?,
+    
+    ## classifie la variation contenue dans cet élément selon toute typologie adéquate.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+lem =
+  
+  ## (lemme) contient le lemme ou le texte de base d'une variante textuelle [12.1. The Apparatus Entry, Readings, and Witnesses]
+  element lem {
+    (text
+     | model.divLike
+     | model.divPart
+     | model.gLike
+     | model.phrase
+     | model.inter
+     | model.global
+     | model.rdgPart)*,
+    att.global.attributes,
+    att.textCritical.attributes,
+    att.witnessed.attributes,
+    empty
+  }
+rdg =
+  
+  ## (leçon) contient une leçon à l'intérieur d'une variante du texte. [12.1. The Apparatus Entry, Readings, and Witnesses]
+  element rdg {
+    (text
+     | model.divLike
+     | model.divPart
+     | model.gLike
+     | model.phrase
+     | model.inter
+     | model.global
+     | model.rdgPart)*,
+    att.global.attributes,
+    att.textCritical.attributes,
+    att.witnessed.attributes,
+    empty
+  }
+witDetail =
+  
+  ## (informations détaillées sur le témoin) donne des renseignements supplémentaires sur un témoin particulier ou sur des témoins, pour une leçon particulière. [12.1. The Apparatus Entry, Readings, and Witnesses]
+  element witDetail {
+    (text | model.gLike | model.phrase | model.global | bibl)*,
+    att.global.attributes,
+    att.pointing.attributes,
+    
+    ## décrit le type de renseignement donné sur le témoin.
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    [
+      a:documentation [
+        "(témoins) contient le ou les code(s) identifiant le ou le(s) témoin(s) auxquels fait référence l'élément "
+        ns1:code [ "<witDetail>" ]
+        "."
+      ]
+    ]
+    attribute wit {
+      list {
+        xsd:anyURI { pattern = "\S+" }+
+      }
+    },
+    empty
+  }
+wit =
+  
+  ## (témoin) contient une liste d'une ou plusieurs abréviation(s) désignant des témoins attestant d'une leçon donnée, pour une version du texte. [12.1.4. Witness Information]
+  element wit {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.rdgPart.attributes,
+    empty
+  }
+listWit =
+  
+  ## (liste de témoins) donne une liste de définitions pour tous les témoignages cités dans un apparat critique, pouvant être groupées de façon hiérarchique. [12.1. The Apparatus Entry, Readings, and Witnesses]
+  element listWit {
+    (model.headLike?, (witness | listWit)+),
+    att.global.attributes,
+    att.sortable.attributes,
+    empty
+  }
+witness =
+  
+  ## (témoin) contient soit la description d'un seul témoin auquel il est fait référence à l'intérieur de l'apparat critique, soit une liste de témoins, à laquelle on doit faire référence par une seule abréviation [12.1. The Apparatus Entry, Readings, and Witnesses]
+  element witness {
+    (text | model.limitedPhrase | model.inter | note)*,
+    att.global.attributes,
+    att.sortable.attributes,
+    empty
+  }
+lacunaStart =
+  
+  ## (début d'une lacune) indique le début d'une lacune dans le texte d'un témoin textuel quasiment complet. [12.1.5. Fragmentary Witnesses]
+  element lacunaStart {
+    empty, att.global.attributes, att.rdgPart.attributes, empty
+  }
+lacunaEnd =
+  
+  ## (fin d'une lacune) indique la fin d'une lacune dans le texte d'un témoin textuel quasiment complet [12.1.5. Fragmentary Witnesses]
+  element lacunaEnd {
+    empty, att.global.attributes, att.rdgPart.attributes, empty
+  }
+att.lexicographic.normalized.attributes =
+  att.lexicographic.normalized.attribute.norm,
+  att.lexicographic.normalized.attribute.orig
+att.lexicographic.normalized.attribute.norm =
+  
+  ## (normalisé) donne une forme normalisée de l'information fournie par le texte source sous une forme non normalisée.
+  attribute norm { xsd:string }?
+att.lexicographic.normalized.attribute.orig =
+  
+  ## (original) indique la chaîne originale ou contient une chaîne vide si l'élément n'apparaît pas dans le texte source.
+  attribute orig { xsd:string }?
+att.linguistic.attributes =
+  att.lexicographic.normalized.attributes,
+  att.linguistic.attribute.lemma,
+  att.linguistic.attribute.lemmaRef,
+  att.linguistic.attribute.pos,
+  att.linguistic.attribute.msd,
+  att.linguistic.attribute.join
+att.linguistic.attribute.lemma =
+  
+  ## fournit le lemme du mot (entrée du dictionnaire)
+  attribute lemma { xsd:string }?
+att.linguistic.attribute.lemmaRef =
+  
+  ## provides a pointer to a definition of the lemma for the word, for example in an online lexicon.
+  attribute lemmaRef {
+    xsd:anyURI { pattern = "\S+" }
+  }?
+att.linguistic.attribute.pos =
+  
+  ## (part of speech) indicates the part of speech assigned to a token (i.e. information on whether it is a noun, adjective, or verb), usually according to some official reference vocabulary (e.g. for German: STTS, for English: CLAWS, for Polish: NKJP, etc.).
+  attribute pos { xsd:string }?
+att.linguistic.attribute.msd =
+  [
+    a:documentation [
+      "(morphosyntactic description) supplies morphosyntactic information for a token, usually according to some official reference vocabulary (e.g. for German: "
+      ns1:a [
+        href =
+          "http://www.ims.uni-stuttgart.de/forschung/ressourcen/lexika/TagSets/stts-1999.pdf"
+        "STTS-large tagset"
+      ]
+      "; for a feature description system designed as (pragmatically) universal, see "
+      ns1:a [
+        href = "http://universaldependencies.org/u/feat/index.html"
+        "Universal Features"
+      ]
+      ")."
+    ]
+  ]
+  attribute msd { xsd:string }?
+att.linguistic.attribute.join =
+  
+  ## when present, provides information on whether the token in question is adjacent to another, and if so, on which side.
+  attribute join {
+    
+    ## (the token is not adjacent to another) 
+    "no"
+    | 
+      ## (there is no whitespace on the left side of the token) 
+      "left"
+    | 
+      ## (there is no whitespace on the right side of the token) 
+      "right"
+    | 
+      ## (there is no whitespace on either side of the token) 
+      "both"
+    | 
+      ## (the token overlaps with another; other devices (specifying the extent and the area of overlap) are needed to more precisely locate this token in the character stream) 
+      "overlap"
+  }?
+att.global.analytic.attributes = att.global.analytic.attribute.ana
+att.global.analytic.attribute.ana =
+  [
+    a:documentation [
+      "(analyse) indique un ou plusieurs éléments contenant des interprétations de l'élément qui porte l'attribut "
+      ns1:code [ "@ana" ]
+      "."
+    ]
+  ]
+  attribute ana {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+w =
+  
+  ## (mot) représente un mot grammatical (pas nécessairement orthographique) [17.1. Linguistic Segment Categories 17.4.2. Lightweight Linguistic Annotation]
+  element w {
+    ((text
+      | model.gLike
+      | seg
+      | gap
+      | space
+      | model.hiLike
+      | model.milestoneLike
+      | model.noteLike
+      | choice
+      | subst
+      | model.pPart.transcriptional)+)
+    >> s:pattern [
+         id = "Manuscrit_Roi-w-noBlanksInW-constraint-assert-16"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:w"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test =
+               ".[not(child::text()[normalize-space(.) != '' and contains(., ' ')])]"
+             "Les mots (w) ne doivent pas contenir de nœuds de textes\x{a}" ~
+             "                                        avec des blancs (utiliser\x{a}" ~
+             "                                    space)."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attribute.xmlid,
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.segLike.attributes,
+    att.typed.attributes,
+    att.linguistic.attributes,
+    att.notated.attributes,
+    
+    ## (interprétation) indique comment l'élément en question a été rendu ou présenté dans le texte source
+    attribute rend {
+      list {
+        (
+         ## spécifie que deux mots sont unis dans la source (sauf cas d'élision)
+         "aggl"
+         | 
+           ## spécifie que, pour deux mots unis dans la source, le premier donne lieu à une élision
+           "elision"
+         | 
+           ## spécifie que, pour deux mots séparés dans la source, le premier donne lieu à une élision
+           "elision-sans-aggl"
+         | 
+           ## spécifie qu'un article, agrégé au mot précédent dans la source, donne lieu à une élision
+           "enclise")+
+      }
+    }?,
+    empty
+  }
+c =
+  
+  ## (caractère) représente un caractère [17.1. Linguistic Segment Categories]
+  element c {
+    macro.xtext,
+    att.global.facs.attributes,
+    att.global.attributes,
+    att.segLike.attributes,
+    att.typed.attributes,
+    att.notated.attributes,
+    empty
+  }
+pc =
+  
+  ## (punctuation character) contient un caractère ou une chaîne de caractères considérés comme un signe de ponctuation unique. [17.1.2. Below the Word Level 17.4.2. Lightweight Linguistic Annotation]
+  element pc {
+    (text | model.gLike | c | model.pPart.edit)*,
+    att.global.attributes,
+    att.segLike.attributes,
+    att.linguistic.attributes,
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    attribute type {
+      
+      ## caractérise la ponctuation éditoriale
+      "supplied"
+      | 
+        ## peut être utilisé pour distinguer la ponctuation originale
+        "orig"
+    },
+    
+    ##
+    attribute subtype {
+      
+      ## caractérise un signe de ponctuation utilisé comme multiplicateur
+      "multiplicateur"
+      | 
+        ## caractérise un signe de ponctuation utilisé comme séparateur dans une énumération
+        "enumeration"
+      | 
+        ## caractérise un signe de ponctuation utilisé comme séparateur dans la mise en page (séparateur de colonne, etc.)
+        "miseEnPage"
+      | 
+        ## caractérise un signe de ponctuation utilisé comme séparateur de colonne ou point final de vers
+        "colSep"
+      | 
+        ##
+        "enjambement"
+      | 
+        ##
+        "corrMetrique"
+      | 
+        ##
+        "juxtaposition"
+      | 
+        ## caractérise un signe de ponctuation annonçant un discours
+        "discours"
+    }?,
+    empty
+  }
+model.persNamePart = surname | forename | nameLink | addName | roleName
+model.persNamePart_alternation =
+  surname | forename | nameLink | addName | roleName
+model.persNamePart_sequence =
+  surname, forename, nameLink, addName, roleName
+model.persNamePart_sequenceOptional =
+  surname?, forename?, nameLink?, addName?, roleName?
+model.persNamePart_sequenceOptionalRepeatable =
+  surname*, forename*, nameLink*, addName*, roleName*
+model.persNamePart_sequenceRepeatable =
+  surname+, forename+, nameLink+, addName+, roleName+
+orgName =
+  
+  ## (nom d'organisation) contient le nom d'une organisation. [13.2.2. Organizational Names]
+  element orgName {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.datable.attributes,
+    att.editLike.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+persName =
+  
+  ## (nom de personne) contient un nom propre ou une expression nominale se référant à une personne, pouvant inclure tout ou partie de ses prénoms, noms de famille, titres honorifiques, noms ajoutés, etc. [13.2.1. Personal Names]
+  element persName {
+    macro.phraseSeq
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-persName-persNameContent-constraint-rule-12"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "//tei:body//tei:persName"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test = "tei:forename or tei:addName"
+             "un élément\x{a}" ~
+             "                                            persName du corps du document doit contenir un nom de\x{a}" ~
+             "                                            personne, sous la forme d'un prénom (forename) et/ou\x{a}" ~
+             "                                            d'une périphrase, épithète, etc. (addName)."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.datable.attributes,
+    att.editLike.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+surname =
+  
+  ## (nom de famille) contient un nom de famille (hérité) par opposition à un nom donné, nom de baptême ou surnom. [13.2.1. Personal Names]
+  element surname {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+forename =
+  
+  ## (prénom) contient un prénom, qu'il soit donné ou un nom de baptême. [13.2.1. Personal Names]
+  element forename {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+nameLink =
+  
+  ## (lien entre les composants d'un nom) contient une particule ou une expression exprimant un lien, utilisés dans un nom mais considérés comme n'en faisant pas partie, comme "van der" ou "de". [13.2.1. Personal Names]
+  element nameLink {
+    macro.phraseSeq, att.global.attributes, att.typed.attributes, empty
+  }
+addName =
+  
+  ## (nom additionnel) contient une composante de nom additionnelle, comme un surnom, une épithète, un alias ou toute autre expression descriptive utilisée dans un nom de personne. [13.2.1. Personal Names]
+  element addName {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+roleName =
+  
+  ## (rôle) contient un composant du nom d'une personne, indiquant que celle-ci a un rôle ou une position particulière dans la société, comme un titre ou un rang officiel. [13.2.1. Personal Names]
+  element roleName {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+placeName =
+  
+  ## (nom de lieu) contient un nom de lieu absolu ou relatif. [13.2.3. Place Names]
+  element placeName {
+    macro.phraseSeq,
+    att.datable.attributes,
+    att.editLike.attributes,
+    att.global.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+country =
+  
+  ## (pays) contient le nom d'une unité géo-politique, comme une nation, un pays, une colonie ou une communauté, plus grande ou administrativement supérieure à une région et plus petite qu'un bloc. [13.2.3. Place Names]
+  element country {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.naming.attributes,
+    att.typed.attributes,
+    att.datable.attributes,
+    empty
+  }
+settlement =
+  
+  ## (lieu de peuplement) contient le nom d'un lieu de peuplement comme une cité, une ville ou un village, identifié comme une unité géo-politique ou administrative unique. [13.2.3. Place Names]
+  element settlement {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.naming.attributes,
+    att.typed.attributes,
+    att.datable.attributes,
+    empty
+  }
+listPerson =
+  
+  ## (liste de personnes) contient une liste d'éléments, chacun d'entre eux apportant des informations sur une personne précise ou sur un groupe de personnes, par exemple les participants à une interaction linguistique, ou les personnes citées dans une source historique. [13.3.2. The Person Element 15.2. Contextual Information 2.4. The Profile Description 15.3.2. Declarable Elements]
+  element listPerson {
+    (model.headLike*,
+     empty*,
+     ((model.personLike | listPerson)+, empty*)+),
+    att.global.attributes,
+    att.typed.attributes,
+    att.sortable.attributes,
+    empty
+  }
+listPlace =
+  
+  ## (liste de lieux) contient une liste de lieux, qui peut être suivie d'une liste de relations définies entre les lieux (autres que la relation d'inclusion). [2.2.7. The Source Description 13.3.4. Places]
+  element listPlace {
+    (model.headLike*,
+     empty*,
+     ((model.placeLike | listPlace)+, empty*)+),
+    att.global.attributes,
+    att.typed.attributes,
+    att.sortable.attributes,
+    empty
+  }
+person =
+  
+  ## (personne) fournit des informations sur un individu identifiable, par exemple un participant à une interaction linguistique, ou une personne citée dans une source historique. [13.3.2. The Person Element 15.2.2. The Participant Description]
+  element person {
+    (model.personPart | model.global)*,
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.editLike.attributes,
+    att.sortable.attributes,
+    
+    ## (identifiant) fournit un identifiant unique pour l'élément qui porte l'attribut
+    attribute xml:id { xsd:ID },
+    
+    ## précise un rôle principal ou une classification principale pour cette personne.
+    attribute role {
+      list {
+        xsd:token { pattern = "[^\p{C}\p{Z}]+" }+
+      }
+    }?,
+    
+    ## précise le sexe de la personne.
+    attribute sex {
+      list {
+        xsd:token { pattern = "[^\p{C}\p{Z}]+" }+
+      }
+    }?,
+    
+    ## specifies the gender of the person.
+    attribute gender {
+      list {
+        xsd:token { pattern = "[^\p{C}\p{Z}]+" }+
+      }
+    }?,
+    
+    ## précise une tranche d'âge pour la personne.
+    attribute age {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+att.global.facs.attributes = att.global.facs.attribute.facs
+att.global.facs.attribute.facs =
+  
+  ## (fac-similé) pointe directement vers une image ou vers une partie d'une image correspondant au contenu de l'élément.
+  attribute facs {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+facsimile =
+  
+  ## contient une représentation d'une source écrite quelconque sous la forme d'un ensemble d'images plutôt que sous la forme d'un texte transcrit ou encodé. [11.1. Digital Facsimiles]
+  element facsimile {
+    (front?, (model.graphicLike | surface | surfaceGrp)+, back?)
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-facsimile-no_facsimile_text_nodes-constraint-rule-13"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:facsimile//tei:line | tei:facsimile//tei:zone"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test = "child::text()[ normalize-space(.) ne '']"
+             "\x{a}" ~
+             "  	  A facsimile element represents a text with images, thus\x{a}" ~
+             "	  transcribed text should not be present within it.\x{a}" ~
+             "	"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    empty
+  }
+surface =
+  
+  ## définit une surface écrite comme un rectangle décrit par ses coordonnées spatiales, en regroupant éventuellement une ou plusieurs représentations graphiques de cet espace et des zones rectangulaires intéressantes à l'intérieur de celui-ci. [11.1. Digital Facsimiles 11.2.2. Embedded Transcription]
+  element surface {
+    ((model.global | model.labelLike | model.graphicLike)*,
+     ((zone | surface | surfaceGrp), model.global*)*),
+    att.global.attributes,
+    att.typed.attributes,
+    
+    ## describes the method by which this surface is or was connected to the main surface
+    ## Sample values include: 1] glued; 2] pinned; 3] sewn
+    attribute attachment {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    
+    ## indicates whether the surface is attached and folded in such a way as to provide two writing surfaces
+    attribute flipping { xsd:boolean }?,
+    empty
+  }
+surfaceGrp =
+  
+  ## (surface group) defines any kind of useful grouping of written surfaces, for example the recto and verso of a single leaf, which the encoder wishes to treat as a single unit. [11.1. Digital Facsimiles]
+  element surfaceGrp {
+    (model.global | surface | surfaceGrp)+,
+    att.global.attributes,
+    att.typed.attributes,
+    empty
+  }
+zone =
+  [
+    a:documentation [
+      "définit une surface planaire de tout type par rapport à un élément "
+      ns1:code [ "<surface>" ]
+      ". [11.1. Digital Facsimiles 11.2.2. Embedded Transcription]"
+    ]
+  ]
+  element zone {
+    (text | model.gLike | model.graphicLike | model.global | surface)*,
+    att.global.attributes,
+    att.typed.attributes,
+    att.written.attributes,
+    [
+      a:defaultValue = "0"
+      a:documentation [
+        "indicates the amount by which this zone has been rotated clockwise, with respect to the normal orientation of the parent "
+        ns1:code [ "<surface>" ]
+        " element as implied by the dimensions given in the "
+        ns1:code [ "<msDesc>" ]
+        " element or by the coordinates of the "
+        ns1:code [ "<surface>" ]
+        " itself. The orientation is expressed in arc degrees."
+      ]
+    ]
+    attribute rotate { xsd:nonNegativeInteger }?,
+    empty
+  }
+damage =
+  
+  ## (dommage) sert à encoder une zone qui a subi des dommages dans le manuscrit témoin du texte. [11.3.3.1. Damage, Illegibility, and Supplied Text]
+  element damage {
+    macro.paraContent,
+    att.global.attributes,
+    att.typed.attributes,
+    att.damaged.attributes,
+    empty
+  }
+ex =
+  
+  ## (développement éditorial) contient une succession de lettres ajoutées par un éditeur ou un transcripteur pour développer une abréviation. [11.3.1.2. Abbreviation and Expansion]
+  element ex {
+    macro.xtext,
+    att.global.attributes,
+    att.editLike.attributes,
+    att.dimensions.attributes,
+    empty
+  }
+handShift =
+  
+  ## (reprise de main) marque le début d'une section du texte écrite par une nouvelle main ou le début d'une nouvelle séance d'écriture. [11.3.2.1. Document Hands]
+  element handShift {
+    empty,
+    att.global.attributes,
+    att.handFeatures.attributes,
+    
+    ## donne l'identifiant de la nouvelle main.
+    attribute new {
+      xsd:anyURI { pattern = "\S+" }
+    },
+    empty
+  }
+am =
+  
+  ## (marqueur d'abréviation) contient une succession de lettres ou de signes présents dans une abréviation mais omis ou remplacés dans la forme développée de l'abréviation [11.3.1.2. Abbreviation and Expansion]
+  element am {
+    (text | model.gLike | model.pPart.transcriptional)*,
+    att.global.attributes,
+    att.typed.attributes,
+    att.editLike.attributes,
+    empty
+  }
+space =
+  
+  ## (espace) permet de situer un espace significatif dans le texte édité. [11.4.1. Space]
+  element space {
+    (model.descLike | model.certLike)*,
+    att.global.facs.attributes,
+    att.global.attribute.xmlid,
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.source.attribute.source,
+    att.typed.attributes,
+    att.dimensions.attribute.precision,
+    att.dimensions.attribute.scope,
+    att.ranging.attribute.atLeast,
+    att.ranging.attribute.atMost,
+    att.ranging.attribute.min,
+    att.ranging.attribute.max,
+    att.ranging.attribute.confidence,
+    
+    ## (responsable) (responsible party) indicates the individual responsible for identifying and measuring the space
+    attribute resp {
+      list {
+        xsd:anyURI { pattern = "\S+" }+
+      }
+    }?,
+    
+    ## noms des unités utilisées pour la mesure.
+    [ a:defaultValue = "chars" ]
+    attribute unit {
+      
+      ## (caractères) 
+      "chars"
+      | 
+        ## (lignes) 
+        "lignes"
+      | 
+        ## (colonnes) 
+        "columns"
+      | 
+        ## (pages) 
+        "pages"
+      | 
+        ## (cahiers) 
+        "quires"
+    }?,
+    
+    ## spécifie la longueur dans les unités indiquées
+    [ a:defaultValue = "1" ]
+    attribute quantity {
+      xsd:double
+      | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+      | xsd:decimal
+    }?,
+    
+    ## (dimension) indique si l'espace est vertical ou horizontal.
+    attribute dim {
+      
+      ## l'espace est horizontal.
+      "horizontal"
+      | 
+        ## l'espace est vertical.
+        "vertical"
+    }?,
+    empty
+  }
+subst =
+  
+  ## ( substitution) regroupe une ou plusieurs parties de texte supprimées et une ou plusieurs parties de texte ajoutées, lorsque cette combinaison peut être considérée comme une intervention unique sur le texte. [11.3.1.5. Substitutions]
+  element subst {
+    ((del | add)+)
+    >> s:pattern [
+         id = "Manuscrit_Roi-subst-substContents1-constraint-assert-18"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:subst"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test =
+               "child::tei:add and (child::tei:del or child::tei:surplus)"
+             "\x{a}" ~
+             "                  "
+             s:name [ ]
+             " must have at least one child add and at least one child del or surplus"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.transcriptional.attributes,
+    att.dimensions.attributes,
+    empty
+  }
+supplied =
+  
+  ## (texte restitué) permet d'encoder du texte restitué par l'éditeur parce que le texte du document original ne peut être lu, par suite de dommages matériels ou de lacunes. [11.3.3.1. Damage, Illegibility, and Supplied Text]
+  element supplied {
+    text,
+    att.global.attributes,
+    att.editLike.attributes,
+    att.dimensions.attributes,
+    
+    ## donne la raison pour laquelle on a dû restituer le texte.
+    ## Suggested values include: 1] overbinding (sous la reliure); 2] faded-ink (encre effacée); 3] damage (dégat matériel)
+    attribute reason {
+      
+      ## (sous la reliure) le texte source est caché par la reliure
+      "overbinding"
+      | 
+        ## (encre effacée) le texte source est illisible car l'encre est effacée
+        "faded-ink"
+      | 
+        ## (dégat matériel) le texte source est illisible en raison d'un dégat matériel
+        "damage"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    empty
+  }
+att.global.linking.attributes =
+  att.global.linking.attribute.corresp,
+  att.global.linking.attribute.sameAs
+att.global.linking.attribute.corresp =
+  
+  ## (correspond) pointe vers des éléments qui ont une correspondance avec l'élément en question.
+  attribute corresp {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+att.global.linking.attribute.sameAs =
+  
+  ## pointe vers un élément identique à l'élément en question.
+  attribute sameAs {
+    xsd:anyURI { pattern = "\S+" }
+  }?
+ab =
+  
+  ## (bloc anonyme) contient une unité de texte quelconque, de niveau "composant", faisant office de contenant anonyme pour une expression ou des éléments de niveau intermédiaire, analogue à un paragraphe mais sans sa portée sémantique. [16.3. Blocks, Segments, and Anchors]
+  element ab {
+    macro.abContent
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-ab-abstractModel-structure-ab-in-l-or-lg-constraint-report-19"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:ab"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(ancestor::tei:l or ancestor::tei:lg) and not( ancestor::tei:floatingText |parent::tei:figure |parent::tei:note )"
+             "\x{a}" ~
+             "        Abstract model violation: Lines may not contain higher-level divisions such as p or ab, unless ab is a child of figure or note, or is a descendant of floatingText.\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.typed.attributes,
+    att.written.attributes,
+    empty
+  }
+seg =
+  
+  ## (segment quelconque) contient une unité de texte quelconque de niveau segment. [16.3. Blocks, Segments, and Anchors 6.2. Components of the Verse Line 7.2.5. Speech Contents]
+  element seg {
+    macro.paraContent,
+    att.global.attributes,
+    att.segLike.attributes,
+    att.typed.attributes,
+    att.written.attributes,
+    att.notated.attributes,
+    empty
+  }
+att.msExcerpt.attributes = att.msExcerpt.attribute.defective
+att.msExcerpt.attribute.defective =
+  
+  ## indique si le passage décrit est fautif, i.e. incomplet en raison d'une lacune ou d'une détérioration.
+  attribute defective {
+    xsd:boolean
+    | (
+       ##
+       "unknown"
+       | 
+         ##
+         "inapplicable")
+  }?
+att.msClass.attributes = att.msClass.attribute.class
+att.msClass.attribute.class =
+  
+  ## spécifie la ou les catégories ou classes auxquelles l'item appartient.
+  attribute class {
+    list {
+      xsd:anyURI { pattern = "\S+" }+
+    }
+  }?
+msDesc =
+  
+  ## (description d'un manuscrit) contient la description d'un manuscrit individuel [10.1. Overview]
+  element msDesc {
+    (msIdentifier,
+     model.headLike,
+     msContents?,
+     msFrag*,
+     physDesc?,
+     history,
+     additional?),
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.responsibility.attribute.cert,
+    att.global.responsibility.attribute.resp,
+    att.global.source.attribute.source,
+    att.sortable.attributes,
+    att.typed.attributes,
+    att.docStatus.attributes,
+    
+    ## (identifiant) fournit un identifiant unique pour l'élément qui porte l'attribut
+    attribute xml:id { xsd:ID },
+    empty
+  }
+catchwords =
+  
+  ## (réclames) décrit le système utilisé pour s'assurer que les cahiers formant un manuscrit ou un incunable sont dans le bon ordre, typiquement au moyen d'annotations en bas de page. [10.3.7. Catchwords, Signatures, Secundo Folio]
+  element catchwords {
+    macro.phraseSeq
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-catchwords-catchword_in_msDesc-constraint-assert-19"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:catchwords"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "ancestor::tei:msDesc or ancestor::tei:egXML"
+             "The "
+             sch:name [ ]
+             " element should not be used outside of msDesc."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    empty
+  }
+dimensions =
+  
+  ## (dimensions) contient une spécification des dimensions. [10.3.4. Dimensions]
+  element dimensions {
+    ((dim | model.dimLike)*)
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-dimensions-duplicateDim-constraint-report-20"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:dimensions"
+           "\x{a}" ~
+           "               "
+           s:report [
+             test = "count(tei:width)> 1"
+             "\x{a}" ~
+             "The element "
+             s:name [ ]
+             " may appear once only\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "               "
+           s:report [
+             test = "count(tei:height)> 1"
+             "\x{a}" ~
+             "The element "
+             s:name [ ]
+             " may appear once only\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "               "
+           s:report [
+             test = "count(tei:depth)> 1"
+             "\x{a}" ~
+             "The element "
+             s:name [ ]
+             " may appear once only\x{a}" ~
+             "      "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.dimensions.attributes,
+    
+    ## indique quel aspect de l'objet est mesuré.
+    ## Sample values include: 1] leaves; 2] ruled; 3] pricked; 4] written; 5] miniatures; 6] binding; 7] box
+    attribute type {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+dim =
+  
+  ## contains any single measurement forming part of a dimensional specification of some sort. [10.3.4. Dimensions]
+  element dim {
+    macro.xtext,
+    att.global.attributes,
+    att.typed.attributes,
+    att.dimensions.attributes,
+    empty
+  }
+height =
+  
+  ## (hauteur) contient une dimension prise sur l'axe parallèle au dos du manuscrit. [10.3.4. Dimensions]
+  element height {
+    macro.xtext, att.global.attributes, att.dimensions.attributes, empty
+  }
+depth =
+  
+  ## (épaisseur) contient une dimension mesurée sur le dos du manuscrit. [10.3.4. Dimensions]
+  element depth {
+    macro.xtext, att.global.attributes, att.dimensions.attributes, empty
+  }
+width =
+  
+  ## (largeur) contient une dimension mesurée sur l'axe perpendiculaire au dos du manuscrit. [10.3.4. Dimensions]
+  element width {
+    macro.xtext, att.global.attributes, att.dimensions.attributes, empty
+  }
+heraldry =
+  
+  ## (héraldique) contient une devise ou une formule d'héraldique, comme celles qu'on trouve sur un blason, des armoiries, etc. [10.3.8. Heraldry]
+  element heraldry { macro.phraseSeq, att.global.attributes, empty }
+locus =
+  
+  ## (locus) définit une séquence continue de références de feuillets au sein d'un manuscrit ou d'une partie de manuscrit. [10.3.5. References to Locations within a Manuscript]
+  element locus {
+    (text | model.gLike | hi | locus)*,
+    att.global.attributes,
+    att.pointing.attributes,
+    att.typed.attributes,
+    [
+      a:documentation [
+        "(système) désigne le système de foliotation utilisé pour localiser la subdivision du manuscrit qui est en cours de description, par le biais d'un pointeur vers un élément "
+        ns1:code [ "<foliation>" ]
+        "."
+      ]
+    ]
+    attribute scheme {
+      xsd:anyURI { pattern = "\S+" }
+    },
+    
+    ## (depuis) Spécifie, sous une forme normalisée, le point de départ de la localisation.
+    attribute from {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    
+    ## (jusqu'à) Spécifie, sous une forme normalisée, la borne de fin pour la localisation.
+    attribute to {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    empty
+  }
+locusGrp =
+  
+  ## (groupe d'emplacements) regroupe un certain nombre d'emplacements qui forment ensemble un item identifiable bien que discontinu dans un manuscrit ou une partie de manuscrit selon une foliotation spécifique. [10.3.5. References to Locations within a Manuscript]
+  element locusGrp { locus+, att.global.attributes, empty }
+material =
+  
+  ## (matériau) Contient un mot ou une expression décrivant le ou les matériau(x) utilisé(s) pour fabriquer un manuscrit (ou une partie d'un manuscrit). [10.3.2. Material and Object Type]
+  element material {
+    (text | term | locusGrp | locus),
+    att.global.attributes,
+    att.canonical.attributes,
+    att.typed.attributes,
+    
+    ## describes the function or use of the material in relation to the object as a whole.
+    ## Sample values include: 1] binding; 2] endband; 3] slipcase; 4] support; 5] tie
+    attribute function {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    
+    ## identifies one or more elements to which the metamark applies.
+    attribute target {
+      list {
+        xsd:anyURI { pattern = "\S+" }+
+      }
+    }?,
+    empty
+  }
+objectType =
+  
+  ## (type d'objet) contient un mot ou une expression qui décrit le type de l'objet consideré. [10.3.2. Material and Object Type]
+  element objectType {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.canonical.attributes,
+    empty
+  }
+origDate =
+  
+  ## (date de la création) Contient une date, dans une forme libre, utilisée pour dater la création d'un manuscrit ou d'une partie d'un manuscrit. [10.3.1. Origination]
+  element origDate {
+    ((text | model.gLike | model.phrase | model.global)*)
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-origDate-origDate-when-or-from-to-or-notBefore-notAfteer-constraint-assert-20"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:origDate"
+           "\x{a}" ~
+           "               "
+           s:assert [
+             test =
+               "@when or (@from and @to) or (@notBefore and @notAfter)"
+             "La date d'origine, ou une période ou un intervalle, doit\x{a}" ~
+             "                                        être spécifiée"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attribute.xmlid,
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.source.attribute.source,
+    att.datable.attributes,
+    att.dimensions.attributes,
+    att.editLike.attributes,
+    
+    ## (certitude) donne le degré de certitude associée à l'intervention ou à l'interprétation.
+    attribute cert {
+      xsd:double
+      | (
+         ##
+         "high"
+         | 
+           ##
+           "medium"
+         | 
+           ##
+           "low"
+         | 
+           ##
+           "unknown")
+    },
+    
+    ## (responsable) indique l'agent responsable de l'intervention ou de l'interprétation, par exemple un éditeur ou un transcripteur.
+    attribute resp {
+      list {
+        xsd:anyURI { pattern = "\S+" }+
+      }
+    },
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    ## Suggested values include: 1] dateManuscrit; 2] dateComposition
+    attribute type {
+      
+      ## date d'origine du témoin
+      "dateManuscrit"
+      | 
+        ## date d'origine de l'œuvre
+        "dateComposition"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+origPlace =
+  
+  ## (lieu de création) Contient un nom de lieu, dans une forme libre, utilisé pour désigner l'endroit où a été produit un manuscrit ou une partie d'un manuscrit. [10.3.1. Origination]
+  element origPlace {
+    macro.phraseSeq,
+    att.global.attribute.xmlid,
+    att.global.attribute.n,
+    att.global.attribute.xmllang,
+    att.global.rendition.attribute.rend,
+    att.global.linking.attribute.corresp,
+    att.global.linking.attribute.sameAs,
+    att.global.analytic.attribute.ana,
+    att.global.source.attribute.source,
+    att.naming.attributes,
+    att.datable.attributes,
+    att.editLike.attributes,
+    
+    ## (certitude) donne le degré de certitude associée à l'intervention ou à l'interprétation.
+    attribute cert {
+      xsd:double
+      | (
+         ##
+         "high"
+         | 
+           ##
+           "medium"
+         | 
+           ##
+           "low"
+         | 
+           ##
+           "unknown")
+    },
+    
+    ## (responsable) indique l'agent responsable de l'intervention ou de l'interprétation, par exemple un éditeur ou un transcripteur.
+    attribute resp {
+      list {
+        xsd:anyURI { pattern = "\S+" }+
+      }
+    },
+    
+    ## caractérise l'élément en utilisant n'importe quel système ou typologie de classification approprié.
+    ## Suggested values include: 1] lieuManuscrit; 2] lieuComposition
+    attribute type {
+      
+      ## lieu d'origine du témoin
+      "lieuManuscrit"
+      | 
+        ## lieu d'origine de l'œuvre
+        "lieuComposition"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+secFol =
+  
+  ## (deuxième folio) Le mot ou les mots repris d'un point précisément connu d'un codex (comme le début du second feuillet) pour identifier celui-ci de façon univoque. [10.3.7. Catchwords, Signatures, Secundo Folio]
+  element secFol {
+    macro.phraseSeq
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-secFol-secFol_in_msDesc-constraint-assert-21"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:secFol"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "ancestor::tei:msDesc or ancestor::tei:egXML"
+             "The "
+             sch:name [ ]
+             " element should not be used outside of msDesc."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    empty
+  }
+signatures =
+  
+  ## (signatures) Contient une étude des signatures trouvées sur un feuillet ou sur un cahier dans un manuscrit. [10.3.7. Catchwords, Signatures, Secundo Folio]
+  element signatures {
+    macro.specialPara
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-signatures-signatures_in_msDesc-constraint-assert-22"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:signatures"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "ancestor::tei:msDesc or ancestor::tei:egXML"
+             "The "
+             sch:name [ ]
+             " element should not be used outside of msDesc."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    empty
+  }
+stamp =
+  
+  ## (cachet) Contient un mot ou une expression décrivant un cachet ou une marque du même genre. [10.3.3. Watermarks and Stamps]
+  element stamp {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.typed.attributes,
+    att.datable.attributes,
+    empty
+  }
+watermark =
+  
+  ## (filigrane) Contient un mot ou une expression décrivant un filigrane ou une marque du même genre. [10.3.3. Watermarks and Stamps]
+  element watermark { macro.phraseSeq, att.global.attributes, empty }
+msIdentifier =
+  
+  ## (identifiant du manuscrit) Contient les informations requises pour identifier le manuscrit en cours de description. [10.4. The Manuscript Identifier]
+  element msIdentifier {
+    ((country, settlement, institution?, repository, collection, idno)
+     | msName),
+    msName*,
+    (altIdentifier*)
+    >> s:pattern [
+         id =
+           "Manuscrit_Roi-msIdentifier-msId_minimal-constraint-report-23"
+         "\x{a}" ~
+         "            "
+         s:rule [
+           context = "tei:msIdentifier"
+           "\x{a}" ~
+           "               "
+           s:report [
+             test =
+               "not(parent::tei:msPart) and (local-name(*[1])='idno' or local-name(*[1])='altIdentifier' or normalize-space(.)='')"
+             "An msIdentifier must contain either a repository or location."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    empty
+  }
+institution =
+  
+  ## (institution) Contient le nom d'un organisme (comme une université ou une bibliothèque), avec lequel un manuscrit est identifié ; en général c'est le nom de l'institution qui conserve ce manuscrit. [10.4. The Manuscript Identifier]
+  element institution {
+    macro.phraseSeq.limited,
+    att.global.attributes,
+    att.naming.attributes,
+    empty
+  }
+repository =
+  
+  ## (lieu de conservation) Contient le nom d'un dépôt dans lequel des manuscrits sont entreposés, et qui peut faire partie d'une institution. [10.4. The Manuscript Identifier]
+  element repository {
+    macro.phraseSeq.limited,
+    att.global.attributes,
+    att.naming.attributes,
+    empty
+  }
+collection =
+  
+  ## (collection) Contient le nom d'une collection de manuscrits, ceux-ci ne se trouvant pas nécessairement dans le même lieu de conservation. [10.4. The Manuscript Identifier]
+  element collection {
+    macro.phraseSeq.limited,
+    att.global.attributes,
+    att.naming.attributes,
+    att.typed.attributes,
+    empty
+  }
+altIdentifier =
+  
+  ## (autre identifiant) Contient un autre ou un ancien identifiant pour un manuscrit, par exemple un numéro anciennement utilisé dans un catalogue. [10.4. The Manuscript Identifier]
+  element altIdentifier {
+    (country, settlement, institution, repository, collection, idno),
+    att.global.attributes,
+    att.typed.attributes,
+    att.datable.attributes,
+    empty
+  }
+msName =
+  
+  ## (autre nom) contient un autre nom, dans une forme libre, utilisé pour désigner le manuscrit, tel qu'un surnom ou un ocellus nominum. [10.4. The Manuscript Identifier]
+  element msName {
+    (text | model.gLike | name)*,
+    att.global.attributes,
+    att.typed.attributes,
+    empty
+  }
+colophon =
+  
+  ## (colophon) contient le colophon d'une section d'un manuscrit, c'est-à-dire la transcription des informations relatives à la date, au lieu, à l'organisme commanditaire ou aux raisons de la production du manuscrit. [10.6.1. The msItem and msItemStruct Elements]
+  element colophon {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.msExcerpt.attributes,
+    empty
+  }
+explicit =
+  
+  ## (explicit) contient l'explicit d'une section d'un manuscrit, c'est-à-dire les mots terminant le texte proprement dit, à l'exclusion de toute rubrique ou colophon qui pourraient le suivre. [10.6.1. The msItem and msItemStruct Elements]
+  element explicit {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.typed.attributes,
+    att.msExcerpt.attributes,
+    empty
+  }
+filiation =
+  
+  ## (filiation) contient les informations sur la filiation du manuscrit, c'est-à-dire sur ses relations avec d'autres manuscrits connus du même texte, ses protographes, antigraphes et apographes. [10.6.1. The msItem and msItemStruct Elements]
+  element filiation {
+    macro.specialPara,
+    att.global.attributes,
+    att.typed.attributes,
+    empty
+  }
+finalRubric =
+  
+  ## (rubrique de fin) Contient les derniers mots d'une section de texte, qui incluent souvent la mention de son auteur et de son titre, et sont généralement différenciés du texte lui-même par l'utilisation d'une encre rouge, par une taille ou un style d'écriture particuliers, ou par tout autre moyen visuel. [10.6.1. The msItem and msItemStruct Elements]
+  element finalRubric {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.typed.attributes,
+    att.msExcerpt.attributes,
+    empty
+  }
+incipit =
+  
+  ## contient l'incipit d'une section d'un manuscrit, c'est-à-dire les mots commençant le texte proprement dit, à l'exclusion de toute rubrique qui pourrait les précéder, la transcription étant de longueur suffisante pour permettre l'identification de l'œuvre. De tels incipit étaient autrefois souvent utilisés à la place du titre de l'œuvre, pour l'identifier. [10.6.1. The msItem and msItemStruct Elements]
+  element incipit {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.typed.attributes,
+    att.msExcerpt.attributes,
+    empty
+  }
+msContents =
+  
+  ## (contenu du manuscrit) décrit le contenu intellectuel d'un manuscrit ou d'une partie d'un manuscrit sous la forme d'une série d'éléments structurés msItem concernant les items du manuscrit. [10.6. Intellectual Content]
+  element msContents {
+    summary?,
+    msItem+,
+    att.global.attributes,
+    att.msExcerpt.attributes,
+    att.msClass.attributes,
+    empty
+  }
+msItem =
+  
+  ## (item de manuscrit) décrit une œuvre ou un item individualisés dans le contenu intellectuel d'un manuscrit ou d'une partie de manuscrit. [10.6.1. The msItem and msItemStruct Elements]
+  element msItem {
+    (locus | locusGrp),
+    author?,
+    respStmt*,
+    title,
+    idno,
+    note?,
+    rubric?,
+    incipit,
+    explicit,
+    finalRubric?,
+    colophon?,
+    decoNote?,
+    listBibl?,
+    textLang,
+    filiation?,
+    att.global.attributes,
+    att.msExcerpt.attributes,
+    att.msClass.attributes,
+    empty
+  }
+rubric =
+  
+  ## (rubrique) contient le texte d'une rubrique ou d'un intitulé propres à un item, c'est-à-dire des mots qui signalent le début du texte, qui incluent souvent la mention de son auteur et de son titre, et qui sont différenciés du texte lui-même, généralement à l'encre rouge, par une taille ou un style d'écriture particuliers, ou par tout autre procédé de ce genre. [10.6.1. The msItem and msItemStruct Elements]
+  element rubric {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.typed.attributes,
+    att.msExcerpt.attributes,
+    empty
+  }
+summary =
+  
+  ## contains an overview of the available information concerning some aspect of an item or object (for example, its intellectual content, history, layout, typography etc.) as a complement or alternative to the more detailed information carried by more specific elements. [10.6. Intellectual Content]
+  element summary { macro.specialPara, att.global.attributes, empty }
+physDesc =
+  
+  ## (description physique) contient la description physique complète d'un manuscrit ou d'un fragment d'un manuscrit, structurée en utilisant les éléments plus spécialisés appartenant à la classe model.physDescPart. [10.7. Physical Description]
+  element physDesc {
+    objectDesc,
+    handDesc,
+    scriptDesc,
+    musicNotation?,
+    decoDesc,
+    additions?,
+    bindingDesc,
+    accMat?,
+    att.global.attributes,
+    empty
+  }
+objectDesc =
+  
+  ## (description d'objet) contient la description des composants matériels de l'objet en cours de traitement [10.7.1. Object Description]
+  element objectDesc {
+    supportDesc,
+    layoutDesc,
+    att.global.attributes,
+    
+    ## (forme) contient un nom abrégé spécifique au projet, désignant la forme physique du support, par exemple : codex, rouleau, fragment, fragment de feuillet, découpe, etc.
+    attribute form {
+      xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    }?,
+    empty
+  }
+supportDesc =
+  
+  ## (description du support) Regroupe les éléments décrivant le support physique du texte du manuscrit. [10.7.1. Object Description]
+  element supportDesc {
+    support,
+    extent,
+    foliation+,
+    collation,
+    condition?,
+    att.global.attributes,
+    
+    ## (matériau) contient un nom abrégé propre au projet désignant le matériau qui a principalement servi pour fabriquer le support.
+    ## Suggested values include: 1] paper; 2] parch (parchment); 3] mixed
+    attribute material {
+      
+      ##
+      "paper"
+      | 
+        ## (parchemin) 
+        "parch"
+      | 
+        ##
+        "mixed"
+      | xsd:token { pattern = "[^\p{C}\p{Z}]+" }
+    },
+    empty
+  }
+support =
+  
+  ## (support) contient la description des matériaux, techniques, etc., qui ont servi à fabriquer le support physique du texte du manuscrit. [10.7.1. Object Description]
+  element support {
+    (locus?, material, dimensions+, watermark?, note?)+,
+    att.global.attributes,
+    empty
+  }
+collation =
+  
+  ## (collation) contient la description de l'organisation des feuillets ou bifeuillets d'un manuscrit [10.7.1. Object Description]
+  element collation { macro.specialPara, att.global.attributes, empty }
+foliation =
+  
+  ## (foliotation) décrit le ou les systèmes de numérotation des feuillets ou pages d'un codex [10.7.1.4. Foliation]
+  element foliation {
+    (text | term | locus | locusGrp), att.global.attributes, empty
+  }
+condition =
+  
+  ## (état matériel) contient la description de l'état matériel du manuscrit. [10.7.1.5. Condition]
+  element condition { macro.specialPara, att.global.attributes, empty }
+layoutDesc =
+  
+  ## (description de la mise en page) rassemble les descriptions des mises en page d' un manuscrit. [10.7.2. Writing, Decoration, and Other Notations]
+  element layoutDesc {
+    (model.pLike+ | (summary?, layout+)),
+    att.global.attributes,
+    empty
+  }
+layout =
+  
+  ## (mise en page) décrit comment le texte est disposé sur la page, ce qui inclut les informations sur d'éventuels systèmes de réglure, de piqûre ou d'autres techniques de préparation de la page. [10.7.2. Writing, Decoration, and Other Notations]
+  element layout {
+    macro.specialPara,
+    att.global.attributes,
+    
+    ## (colonnes) spécifie le nombre de colonnes présentes sur une page
+    attribute columns {
+      list { xsd:nonNegativeInteger, xsd:nonNegativeInteger? }
+    }?,
+    
+    ## (textual streams) indicates the number of streams per page, each of which contains an independent textual stream
+    attribute streams {
+      list { xsd:nonNegativeInteger, xsd:nonNegativeInteger? }
+    }?,
+    
+    ## (lignes de réglure) spécifie le nombre de lignes de réglure présentes par colonne
+    attribute ruledLines {
+      list { xsd:nonNegativeInteger, xsd:nonNegativeInteger? }
+    }?,
+    
+    ## (lignes d'écriture) spécifie le nombre de lignes écrites par colonne
+    attribute writtenLines {
+      list { xsd:nonNegativeInteger, xsd:nonNegativeInteger? }
+    }?,
+    empty
+  }
+handDesc =
+  
+  ## (description des écritures) contient la description des différents types d'écriture utilisés dans un manuscrit. [10.7.2. Writing, Decoration, and Other Notations]
+  element handDesc {
+    (model.pLike+ | (summary?, handNote+)),
+    att.global.attributes,
+    
+    ## (mains) spécifie le nombre de mains différentes qui ont pu être identifiées dans le manuscrit
+    attribute hands { xsd:nonNegativeInteger }?,
+    empty
+  }
+scriptDesc =
+  
+  ## (script description) contains a description of the scripts used in a manuscript or other object. [10.7.2.1. Writing]
+  element scriptDesc {
+    (model.pLike+ | (summary?, scriptNote+)),
+    att.global.attributes,
+    empty
+  }
+musicNotation =
+  
+  ## (notation musicale) contient la description d'un type de notation musicale. [10.7.2. Writing, Decoration, and Other Notations]
+  element musicNotation {
+    macro.specialPara, att.global.attributes, empty
+  }
+decoDesc =
+  [
+    a:documentation [
+      "(description de la décoration) contient la description de la décoration du manuscrit sous la forme d'une série d'éléments thématiques "
+      ns1:code [ "<decoNote>" ]
+      ", éventuellement précédés d'un "
+      ns1:code [ "<summary>" ]
+      ". [10.7.3. Bindings, Seals, and Additional Material]"
+    ]
+  ]
+  element decoDesc {
+    (summary?, decoNote+), att.global.attributes, empty
+  }
+decoNote =
+  
+  ## (note sur un élément de décoration) contient une note décrivant soit un élément de décoration du mansucrit, soit une catégorie relativement homogène de tels éléments. [10.7.3. Bindings, Seals, and Additional Material]
+  element decoNote {
+    macro.specialPara,
+    att.global.attributes,
+    att.typed.attributes,
+    empty
+  }
+additions =
+  
+  ## (ajouts) contient la description des ajouts significatifs trouvés dans un manuscrit, tels que gloses marginales ou autres annotations. [10.7.2. Writing, Decoration, and Other Notations]
+  element additions { macro.specialPara, att.global.attributes, empty }
+bindingDesc =
+  [
+    a:documentation [
+      "(description de la reliure) décrit les reliures actuelles et anciennes d'un manuscrit, soit en une série de paragraphes p, soit sous la forme d'une série d'éléments "
+      ns1:code [ "<binding>" ]
+      ", un pour chaque reliure [10.7.3.1. Binding Descriptions]"
+    ]
+  ]
+  element bindingDesc {
+    ((model.pLike | decoNote | condition)+ | binding+),
+    att.global.attributes,
+    empty
+  }
+binding =
+  
+  ## (reliure) contient la description d'une reliure, i.e. du type de couverture, d'ais, etc., rencontrés. [10.7.3.1. Binding Descriptions]
+  element binding {
+    (model.pLike | condition | decoNote)+,
+    att.global.attributes,
+    att.datable.attributes,
+    
+    ## (contemporaine) spécifie si la reliure est contemporaine ou non de l'essentiel du contenu du manuscrit.
+    attribute contemporary {
+      xsd:boolean
+      | (
+         ##
+         "unknown"
+         | 
+           ##
+           "inapplicable")
+    }?,
+    empty
+  }
+seal =
+  
+  ## (sceau) contient la description d'un sceau ou d'un objet similaire, attaché au manuscrit. [10.7.3.2. Seals]
+  element seal {
+    (model.pLike | decoNote)+,
+    att.global.attributes,
+    att.typed.attributes,
+    att.datable.attributes,
+    
+    ## (contemporain) spécifie si le sceau est ou non contemporain du manuscrit auquel il est attaché.
+    attribute contemporary {
+      xsd:boolean
+      | (
+         ##
+         "unknown"
+         | 
+           ##
+           "inapplicable")
+    }?,
+    empty
+  }
+accMat =
+  
+  ## (matériel d'accompagnement) donne des détails sur tout matériel d'accompagnement étroitement associé au manuscrit, tel que documents non contemporains ou fragments reliés avec le manuscrit à une époque antérieure. [10.7.3.3. Accompanying Material]
+  element accMat {
+    macro.specialPara,
+    att.global.attributes,
+    att.typed.attributes,
+    empty
+  }
+history =
+  
+  ## (histoire) rassemble les éléments servant à donner un historique complet du manuscrit ou d'une partie du manuscrit. [10.8. History]
+  element history {
+    (origin, provenance*, acquisition?), att.global.attributes, empty
+  }
+origin =
+  
+  ## (origine) contient des informations sur l'origine du manuscrit ou de la partie de manuscrit. [10.8. History]
+  element origin {
+    (origPlace, origDate, macro.specialPara),
+    att.global.attributes,
+    att.editLike.attributes,
+    att.datable.attributes,
+    empty
+  }
+provenance =
+  
+  ## (provenance) contient des informations sur un épisode précis de l'histoire du manuscrit ou de la partie du manuscrit, après sa création et avant son acquisition [10.8. History]
+  element provenance {
+    macro.specialPara,
+    att.global.attributes,
+    att.datable.attributes,
+    att.typed.attributes,
+    empty
+  }
+acquisition =
+  
+  ## (acquisition) contient des informations sur les modalités et circonstances de l'entrée du manuscrit ou de la partie du manuscrit dans l'institution qui le détient [10.8. History]
+  element acquisition {
+    macro.specialPara,
+    att.global.attributes,
+    att.datable.attributes,
+    empty
+  }
+additional =
+  
+  ## (informations complémentaires) regroupe les informations complémentaires sur le manuscrit, incluant une bibliographie, des indications sur ses reproductions, ou des informations sur sa conservation et sur sa gestion [10.9. Additional Information]
+  element additional {
+    (surrogates?, listBibl?), att.global.attributes, empty
+  }
+source =
+  
+  ## (source) décrit la source des informations contenues dans la description du manuscrit. [10.9.1.1. Record History]
+  element source { macro.specialPara, att.global.attributes, empty }
+surrogates =
+  
+  ## (reproductions) contient des informations sur toute reproduction numérique ou photographique du manuscrit en cours de description, qu'elle soit détenue par l'institution de conservation ou ailleurs. [10.9. Additional Information]
+  element surrogates { macro.specialPara, att.global.attributes, empty }
+msFrag =
+  
+  ## (fragment d'un manuscrit) contient des informations sur un fragment d'un manuscrit dispersé, aujourd'hui conservé séparément ou incorporé dans un autre manuscrit. [10.11. Manuscript Fragments]
+  element msFrag {
+    ((altIdentifier | msIdentifier),
+     model.headLike*,
+     (model.pLike+ | (msContents?, physDesc?, history?, additional?))),
+    att.global.attributes,
+    att.typed.attributes,
+    empty
+  }
+g =
+  
+  ## (caractère ou glyphe) représente un glyphe, ou un caractère non standard [5. Characters, Glyphs, and Writing Modes]
+  element g {
+    text,
+    att.global.attributes,
+    att.typed.attributes,
+    
+    ## pointe vers la description du caractère ou du glyphe visé
+    attribute ref {
+      xsd:anyURI { pattern = "\S+" }
+    }?,
+    empty
+  }
+table =
+  
+  ## (tableau) contient du texte affiché sous forme de tableau, en rangées et colonnes. [14.1.1. TEI Tables]
+  element table {
+    ((model.headLike | model.global)*,
+     (model.global* | (model.graphicLike, model.global*)+),
+     model.global*),
+    att.global.attributes,
+    att.typed.attributes,
+    
+    ## (rows) indique le nombre de rangées dans le tableau.
+    attribute rows { xsd:nonNegativeInteger }?,
+    
+    ## (colonnes) indique le nombre de colonnes dans chaque rangée du tableau.
+    attribute cols { xsd:nonNegativeInteger }?,
+    empty
+  }
+formula =
+  
+  ## (formule) contient une formule mathématique ou tout autre type de formule [14.2. Formulæ and Mathematical Expressions]
+  element formula {
+    (text | model.graphicLike | model.hiLike)*,
+    att.global.attributes,
+    att.notated.attributes,
+    empty
+  }
+start = TEI
